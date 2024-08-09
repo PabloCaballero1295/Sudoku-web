@@ -20,38 +20,43 @@ export const Board = () => {
   const [board, setBoard] = useState(grid)
   const [gridBoxes, setGridBoxes] = useState(GetGridBoxes({ data: board }))
 
+  const [loading, setLoading] = useState(true)
+  useEffect(() => {
+    setLoading(true)
+    fetch("https://sudoku-api.vercel.app/api/dosuku")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("DATA RECEIVED")
+        setBoard(data.newboard.grids[0].value)
+        setGridBoxes(GetGridBoxes({ data: data.newboard.grids[0].value }))
+        //setBoard(data.newboard.grids[0].solution)
+        setLoading(false)
+      })
+  }, [])
+
   return (
     <div className="board">
-      {/*
-      {board.map((row, index) => {
-        return (
-          <div key={index} className="testing">
-            {row.map((n: number, index) => {
-              return <Cell key={index} n={n} />
-            })}
+      {loading ? (
+        <p>LOADING</p>
+      ) : (
+        <div>
+          <div className="board-row">
+            <Box data={gridBoxes[0]} />
+            <Box data={gridBoxes[1]} />
+            <Box data={gridBoxes[2]} />
           </div>
-        )
-      })}
-      <br />
-      <br />
-      <br />*/}
-      <>
-        <div className="board-row">
-          <Box data={gridBoxes[0]} />
-          <Box data={gridBoxes[1]} />
-          <Box data={gridBoxes[2]} />
+          <div className="board-row">
+            <Box data={gridBoxes[3]} />
+            <Box data={gridBoxes[4]} />
+            <Box data={gridBoxes[5]} />
+          </div>
+          <div className="board-row">
+            <Box data={gridBoxes[6]} />
+            <Box data={gridBoxes[7]} />
+            <Box data={gridBoxes[8]} />
+          </div>
         </div>
-        <div className="board-row">
-          <Box data={gridBoxes[3]} />
-          <Box data={gridBoxes[4]} />
-          <Box data={gridBoxes[5]} />
-        </div>
-        <div className="board-row">
-          <Box data={gridBoxes[6]} />
-          <Box data={gridBoxes[7]} />
-          <Box data={gridBoxes[8]} />
-        </div>
-      </>
+      )}
     </div>
   )
 }

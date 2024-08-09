@@ -1,12 +1,22 @@
 import { useState } from "react"
 import "./Cell.css"
 
-interface CellProps {
-  n: number
+export interface CellProps {
+  row: number
+  col: number
+  value: number
 }
 
-export const Cell = ({ n }: CellProps) => {
-  const [value, setValue] = useState(n)
+export const Cell = ({ row, col, value }: CellProps) => {
+  const [cellValue, setCellValue] = useState(value)
 
-  return <div className="cell">{value}</div>
+  const handleClick = () => {
+    console.log(row, col)
+  }
+
+  return (
+    <div className="cell" onClick={handleClick}>
+      {cellValue === 0 ? "" : cellValue}
+    </div>
+  )
 }
