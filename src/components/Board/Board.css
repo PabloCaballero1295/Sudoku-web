@@ -1,0 +1,11 @@
+.board {
+  background-color: rgb(245, 245, 200);
+  width: fit-content;
+}
+
+.testing {
+  display: flex;
+  height: auto;
+  align-items: center;
+  width: fit-content;
+}
