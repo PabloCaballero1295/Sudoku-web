@@ -1,8 +1,6 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Cell } from "../Cell/Cell"
-import { Box } from "../Box/Box"
 import "./Board.css"
-import { GetGridBoxes } from "../../utils/utils"
 
 export const Board = () => {
   const rows: number = 9
@@ -18,20 +16,24 @@ export const Board = () => {
   }
 
   const [board, setBoard] = useState(grid)
-  const [gridBoxes, setGridBoxes] = useState(GetGridBoxes({ data: board }))
+  const [solution, setSolution] = useState(grid)
+  const fetchCalled = useRef(false)
 
   const [loading, setLoading] = useState(true)
   useEffect(() => {
-    setLoading(true)
-    fetch("https://sudoku-api.vercel.app/api/dosuku")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("DATA RECEIVED")
-        setBoard(data.newboard.grids[0].value)
-        setGridBoxes(GetGridBoxes({ data: data.newboard.grids[0].value }))
-        //setBoard(data.newboard.grids[0].solution)
-        setLoading(false)
-      })
+    if (!fetchCalled.current) {
+      fetchCalled.current = true
+      setLoading(true)
+
+      fetch("https://sudoku-api.vercel.app/api/dosuku")
+        .then((response) => response.json())
+        .then((data) => {
+          setBoard(data.newboard.grids[0].value)
+          setSolution(data.newboard.grids[0].solution)
+          setLoading(false)
+          console.log("LOADING OFF")
+        })
+    }
   }, [])
 
   return (
@@ -39,23 +41,21 @@ export const Board = () => {
       {loading ? (
         <p>LOADING</p>
       ) : (
-        <div>
-          <div className="board-row">
-            <Box data={gridBoxes[0]} />
-            <Box data={gridBoxes[1]} />
-            <Box data={gridBoxes[2]} />
-          </div>
-          <div className="board-row">
-            <Box data={gridBoxes[3]} />
-            <Box data={gridBoxes[4]} />
-            <Box data={gridBoxes[5]} />
-          </div>
-          <div className="board-row">
-            <Box data={gridBoxes[6]} />
-            <Box data={gridBoxes[7]} />
-            <Box data={gridBoxes[8]} />
-          </div>
-        </div>
+        <>
+          {board.map((row, row_n) => (
+            <div key={row_n} className="board-row">
+              {row.map((col, col_n) => (
+                <Cell
+                  key={`${row_n}_${col_n}`}
+                  row={row_n}
+                  col={col_n}
+                  value={col}
+                  readOnly={col != 0 ? true : false}
+                />
+              ))}
+            </div>
+          ))}
+        </>
       )}
     </div>
   )
