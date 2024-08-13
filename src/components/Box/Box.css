@@ -1,8 +1,0 @@
-.box {
-  border: 1px solid black;
-}
-
-.box-row {
-  display: flex;
-  flex-direction: row;
-}

@@ -26,3 +26,11 @@
   background-color: rgba(0, 0, 0, 0.2);
   font-weight: bold;
 }
+
+.active-cell {
+  background-color: rgba(30, 176, 221, 0.75);
+}
+
+.active-cell-row-col {
+  background-color: rgba(30, 176, 221, 0.25);
+}
