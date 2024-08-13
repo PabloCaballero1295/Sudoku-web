@@ -1,11 +1,11 @@
 import "./App.css"
-import { Board } from "./components/Board/Board"
+import { Sudoku } from "./components/Sudoku/Sudoku"
 
 function App() {
   return (
     <>
-      <p>sudoku</p>
-      <Board />
+      <div className="sudoku-title">sudoku</div>
+      <Sudoku />
     </>
   )
 }

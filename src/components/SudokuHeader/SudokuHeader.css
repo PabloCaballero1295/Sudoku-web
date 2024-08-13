@@ -1,0 +1,10 @@
+.difficulty-row {
+  display: flex;
+  gap: 1em;
+  margin-bottom: 1em;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+}
