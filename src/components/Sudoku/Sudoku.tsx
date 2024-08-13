@@ -9,15 +9,19 @@ export const Sudoku = () => {
   const [sudokuBoard, setSudokuBoard] = useState<number[][]>([])
   const [sudokuSolution, setSudokuSolution] = useState<number[][]>([])
   const [loading, setLoading] = useState(true)
-  const [activeCell, setActiveCell] = useState({ row: -1, col: -1 })
+  const [activeCell, setActiveCell] = useState({ row: 0, col: 0 })
 
   const cols = 9
   const rows = 9
 
-  const updateBoardCell = (row: number, col: number, value: number) => {
+  const updateActiveCellValue = (newValue: number) => {
+    if (initialSudokuBoard[activeCell.row][activeCell.col] != 0) {
+      return
+    }
+
     const copyBoard = deepCopy(sudokuBoard)
 
-    copyBoard[row][col] = value
+    copyBoard[activeCell.row][activeCell.col] = newValue
 
     setSudokuBoard(copyBoard)
   }
@@ -55,11 +59,7 @@ export const Sudoku = () => {
     for (let i = 0; i < rows; i++) {
       tempSudokuSolution[i] = []
       for (let j = 0; j < cols; j++) {
-        if (puzzle[n] == "-") {
-          tempSudokuSolution[i][j] = 0
-        } else {
-          tempSudokuSolution[i][j] = parseInt(solution[n])
-        }
+        tempSudokuSolution[i][j] = parseInt(solution[n])
         n++
       }
     }
@@ -74,10 +74,11 @@ export const Sudoku = () => {
       {!loading ? (
         <Board
           initialBoard={initialSudokuBoard}
+          solution={sudokuSolution}
           board={sudokuBoard}
           activeCell={activeCell}
-          updateBoardCell={updateBoardCell}
           updateActiveCell={updateActiveCell}
+          updateActiveCellValue={updateActiveCellValue}
         />
       ) : undefined}
     </>

@@ -1,3 +1,26 @@
 .sudoku-menu {
   width: 20em;
 }
+
+.numbers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.button-number {
+  font-size: 2em;
+  display: flex;
+  align-items: center;
+  margin: 0.25rem 0.25rem;
+  aspect-ratio: 1/1;
+  background-color: rgb(245, 245, 200);
+  border-radius: 0.5rem;
+  text-align: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+.button-number:hover {
+  background-color: rgb(199, 199, 164);
+}

@@ -9,28 +9,34 @@
   */
   width: calc(100% / 9);
   aspect-ratio: 1/1;
-  border: 1px solid black;
+  border-right: 1px solid rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
   text-align: center;
   user-select: none;
 }
 
 .bottom-border {
-  border-bottom: 5px solid black;
+  border-bottom: 4px solid black;
 }
 
 .right-border {
-  border-right: 5px solid black;
+  border-right: 4px solid black;
 }
 
 .read-only {
-  background-color: rgba(0, 0, 0, 0.2);
+  /*background-color: rgba(0, 0, 0, 0.2);*/
   font-weight: bold;
 }
 
 .active-cell {
-  background-color: rgba(30, 176, 221, 0.75);
+  background-color: rgba(30, 176, 221, 0.65);
 }
 
 .active-cell-row-col {
-  background-color: rgba(30, 176, 221, 0.25);
+  background-color: rgba(30, 176, 221, 0.15);
+}
+
+.error-cell {
+  background-color: rgba(255, 0, 0, 0.2);
+  color: red;
 }

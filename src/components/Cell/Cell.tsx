@@ -6,9 +6,9 @@ export interface CellProps {
   row: number
   col: number
   value: number
+  solutionValue: number
   readOnly: boolean
   activeCell: { row: number; col: number }
-  updateBoardCell: (row: number, col: number, value: number) => void
   updateActiveCell: (row: number, col: number) => void
 }
 
@@ -16,9 +16,9 @@ export const Cell = ({
   row,
   col,
   value,
+  solutionValue,
   readOnly,
   activeCell,
-  updateBoardCell,
   updateActiveCell,
 }: CellProps) => {
   const [cellValue, setCellValue] = useState(value)
@@ -63,6 +63,10 @@ export const Cell = ({
       checkNextActiveCellBox(activeCell.row, activeCell.col, row, col)
     ) {
       cellStyle += " active-cell-row-col"
+    }
+
+    if (cellValue != 0 && cellValue != solutionValue) {
+      cellStyle += " error-cell"
     }
 
     return cellStyle
