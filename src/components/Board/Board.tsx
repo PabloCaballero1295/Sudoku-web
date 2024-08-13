@@ -1,5 +1,4 @@
 import { Cell } from "../Cell/Cell"
-import { SudokuHeader } from "../SudokuHeader/SudokuHeader"
 import { SudokuMenu } from "../SudokuMenu/SudokuMenu"
 
 import "./Board.css"
@@ -23,7 +22,6 @@ export const Board = ({
 }: BoardProps) => {
   return (
     <div className="sudoku-container">
-      <SudokuHeader />
       <div className="sudoku-flex">
         <div className="board">
           {board.map((row, row_n) => (

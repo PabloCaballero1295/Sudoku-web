@@ -36,7 +36,6 @@ export const Cell = ({
   }, [row, col, value])
 
   const handleClick = () => {
-    console.log(`ROW: ${row} COL: ${col} VALUE: ${value}`)
     updateActiveCell(row, col)
   }
 

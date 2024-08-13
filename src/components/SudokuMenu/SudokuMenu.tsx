@@ -6,7 +6,6 @@ interface SudokuMenuProps {
 
 export const SudokuMenu = ({ updateActiveCell }: SudokuMenuProps) => {
   const updateCellValue = (newValue: number) => {
-    console.log(newValue)
     updateActiveCell(newValue)
   }
 
