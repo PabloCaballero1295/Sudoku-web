@@ -5,14 +5,22 @@ import { clamp, deepCopy } from "../../utils/utils"
 import "./Sudoku.css"
 import { SudokuHeader } from "../SudokuHeader/SudokuHeader"
 import { SudokuDifficulty } from "../../constants/enum"
+import { SUDOKU_CLUES_NUMBER } from "../../constants/constants"
+
+export interface BoardCell {
+  value: number
+  notes: number[]
+}
 
 export const Sudoku = () => {
   const [initialSudokuBoard, setInitialSudokuBoard] = useState<number[][]>([])
-  const [sudokuBoard, setSudokuBoard] = useState<number[][]>([])
+  const [sudokuBoard, setSudokuBoard] = useState<BoardCell[][]>([])
   const [sudokuSolution, setSudokuSolution] = useState<number[][]>([])
   const [loading, setLoading] = useState(true)
   const [activeCell, setActiveCell] = useState({ row: 0, col: 0 })
   const [difficulty, setDifficulty] = useState(SudokuDifficulty.Easy)
+  const [notesMode, setNotesMode] = useState(false)
+  const [clues, setClues] = useState(SUDOKU_CLUES_NUMBER)
 
   const cols = 9
   const rows = 9
@@ -26,11 +34,30 @@ export const Sudoku = () => {
 
       const copyBoard = deepCopy(sudokuBoard)
 
-      copyBoard[activeCell.row][activeCell.col] = newValue
+      if (notesMode) {
+        copyBoard[activeCell.row][activeCell.col].value = 0
+
+        if (
+          copyBoard[activeCell.row][activeCell.col].notes.includes(newValue)
+        ) {
+          const index = copyBoard[activeCell.row][
+            activeCell.col
+          ].notes.findIndex((n) => n == newValue)
+
+          if (index != -1) {
+            copyBoard[activeCell.row][activeCell.col].notes.splice(index, 1)
+          }
+        } else {
+          copyBoard[activeCell.row][activeCell.col].notes.push(newValue)
+        }
+      } else {
+        copyBoard[activeCell.row][activeCell.col].value = newValue
+        copyBoard[activeCell.row][activeCell.col].notes = []
+      }
 
       setSudokuBoard(copyBoard)
     },
-    [activeCell, initialSudokuBoard, sudokuBoard]
+    [activeCell, initialSudokuBoard, sudokuBoard, notesMode]
   )
 
   // Function to update de position (row and col) of the active cell
@@ -78,6 +105,32 @@ export const Sudoku = () => {
     setDifficulty(newValue)
   }
 
+  // Function to change de boolean value
+  const toggleNotesMode = useCallback(() => {
+    setNotesMode(!notesMode)
+  }, [notesMode])
+
+  //Function to update a cell value when the user clicks on clue button
+  const updateActiveCellValueWithClue = () => {
+    if (clues <= 0) {
+      return
+    }
+
+    const row = activeCell.row
+    const col = activeCell.col
+
+    if (initialSudokuBoard[row][col] !== 0) {
+      return
+    } else if (sudokuSolution[row][col] === sudokuBoard[row][col].value) {
+      return
+    }
+
+    const solutionValue = sudokuSolution[row][col]
+    updateActiveCellValue(solutionValue)
+    setClues((prevState) => prevState - 1)
+  }
+
+  //This useEffect is used to handle All keyboard actions
   useEffect(() => {
     const numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
     const moves = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"]
@@ -92,6 +145,8 @@ export const Sudoku = () => {
         event.key == "0"
       ) {
         updateActiveCellValue(0)
+      } else if (event.key == "n") {
+        toggleNotesMode()
       }
     }
     // Adde event listener
@@ -101,7 +156,7 @@ export const Sudoku = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown)
     }
-  }, [moveActiveCell, updateActiveCellValue])
+  }, [moveActiveCell, updateActiveCellValue, toggleNotesMode])
 
   useEffect(() => {
     setLoading(true)
@@ -111,7 +166,7 @@ export const Sudoku = () => {
     const solution = sudoku.solution
     const puzzle = sudoku.puzzle
 
-    const sudokuNumbers: number[][] = []
+    const sudokuNumbers: BoardCell[][] = []
     const tempSudokuSolution: number[][] = []
     let n = 0
 
@@ -119,9 +174,9 @@ export const Sudoku = () => {
       sudokuNumbers[i] = []
       for (let j = 0; j < cols; j++) {
         if (puzzle[n] == "-") {
-          sudokuNumbers[i][j] = 0
+          sudokuNumbers[i][j] = { value: 0, notes: [] }
         } else {
-          sudokuNumbers[i][j] = parseInt(puzzle[n])
+          sudokuNumbers[i][j] = { value: parseInt(puzzle[n]), notes: [] }
         }
         n++
       }
@@ -136,8 +191,19 @@ export const Sudoku = () => {
         n++
       }
     }
+    setClues(SUDOKU_CLUES_NUMBER)
     setSudokuBoard(sudokuNumbers)
-    setInitialSudokuBoard(deepCopy(sudokuNumbers))
+
+    const sudokuBoardNumbers: number[][] = []
+
+    sudokuNumbers.map((row, i) => {
+      sudokuBoardNumbers[i] = []
+      row.map((_, j) => {
+        sudokuBoardNumbers[i].push(sudokuNumbers[i][j].value)
+      })
+    })
+
+    setInitialSudokuBoard(deepCopy(sudokuBoardNumbers))
     setSudokuSolution(tempSudokuSolution)
     setLoading(false)
   }, [difficulty])
@@ -157,6 +223,10 @@ export const Sudoku = () => {
             activeCell={activeCell}
             updateActiveCell={updateActiveCell}
             updateActiveCellValue={updateActiveCellValue}
+            notesMode={notesMode}
+            updateNotesMode={toggleNotesMode}
+            clues={clues}
+            handleClue={updateActiveCellValueWithClue}
           />
         </div>
       ) : undefined}

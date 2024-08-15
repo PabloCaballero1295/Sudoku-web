@@ -2,10 +2,11 @@ import { useEffect, useState } from "react"
 import "./Cell.css"
 import { checkNextActiveCellBox } from "../../utils/utils"
 
-export interface CellProps {
+interface CellProps {
   row: number
   col: number
   value: number
+  notes: number[]
   solutionValue: number
   readOnly: boolean
   activeCell: { row: number; col: number }
@@ -16,6 +17,7 @@ export const Cell = ({
   row,
   col,
   value,
+  notes,
   solutionValue,
   readOnly,
   activeCell,
@@ -72,8 +74,26 @@ export const Cell = ({
   }
 
   return (
-    <div className={getCellStyle()} onClick={handleClick}>
-      {cellValue === 0 ? "" : cellValue}
-    </div>
+    <>
+      <div className={getCellStyle()} onClick={handleClick}>
+        {notes.length == 0 ? (
+          cellValue === 0 ? (
+            ""
+          ) : (
+            cellValue
+          )
+        ) : (
+          <div className="notes">
+            {Array(9)
+              .fill("")
+              .map((_, index) => (
+                <div className="notes-number" key={index}>
+                  {notes.includes(index + 1) ? index + 1 : " "}
+                </div>
+              ))}
+          </div>
+        )}
+      </div>
+    </>
   )
 }

@@ -1,4 +1,5 @@
 import { Cell } from "../Cell/Cell"
+import { BoardCell } from "../Sudoku/Sudoku"
 import { SudokuMenu } from "../SudokuMenu/SudokuMenu"
 
 import "./Board.css"
@@ -6,10 +7,14 @@ import "./Board.css"
 interface BoardProps {
   initialBoard: number[][]
   solution: number[][]
-  board: number[][]
+  board: BoardCell[][]
   activeCell: { row: number; col: number }
   updateActiveCell: (row: number, col: number) => void
   updateActiveCellValue: (newValue: number) => void
+  notesMode: boolean
+  updateNotesMode: () => void
+  clues: number
+  handleClue: () => void
 }
 
 export const Board = ({
@@ -19,6 +24,10 @@ export const Board = ({
   activeCell,
   updateActiveCell,
   updateActiveCellValue,
+  notesMode,
+  updateNotesMode,
+  clues,
+  handleClue,
 }: BoardProps) => {
   return (
     <div className="sudoku-container">
@@ -27,15 +36,13 @@ export const Board = ({
           {board.map((row, row_n) => (
             <div key={row_n} className="board-row">
               {row.map((col, col_n) => {
-                if (col_n == 8 && row_n == 8) {
-                  //console.log(initialBoard[row_n][col_n])
-                }
                 return (
                   <Cell
                     key={`${row_n}_${col_n}`}
                     row={row_n}
                     col={col_n}
-                    value={col}
+                    value={col.value}
+                    notes={col.notes}
                     solutionValue={solution[row_n][col_n]}
                     readOnly={initialBoard[row_n][col_n] != 0 ? true : false}
                     activeCell={activeCell}
@@ -46,7 +53,13 @@ export const Board = ({
             </div>
           ))}
         </div>
-        <SudokuMenu updateActiveCell={updateActiveCellValue} />
+        <SudokuMenu
+          updateActiveCell={updateActiveCellValue}
+          notesMode={notesMode}
+          updateNotesMode={updateNotesMode}
+          clues={clues}
+          handleClue={handleClue}
+        />
       </div>
     </div>
   )

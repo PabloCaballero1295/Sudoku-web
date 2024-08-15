@@ -16,6 +16,18 @@
   color: blue;
 }
 
+.notes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  height: 100%;
+}
+
+.notes-number {
+  height: 1.25em;
+  color: black;
+  font-size: 0.4em;
+}
+
 .bottom-border {
   border-bottom: 4px solid black;
 }
