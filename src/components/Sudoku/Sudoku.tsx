@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { Board } from "../Board/Board"
 import { getSudoku } from "sudoku-gen"
-import { clamp, deepCopy } from "../../utils/utils"
+import { checkNextActiveCellBox, clamp, deepCopy } from "../../utils/utils"
 import "./Sudoku.css"
 import { SudokuHeader } from "../SudokuHeader/SudokuHeader"
 import { SudokuDifficulty } from "../../constants/enum"
@@ -21,6 +21,7 @@ export const Sudoku = () => {
   const [difficulty, setDifficulty] = useState(SudokuDifficulty.Easy)
   const [notesMode, setNotesMode] = useState(false)
   const [clues, setClues] = useState(SUDOKU_CLUES_NUMBER)
+  const [errors, setErrors] = useState(0)
 
   const cols = 9
   const rows = 9
@@ -34,7 +35,11 @@ export const Sudoku = () => {
 
       const copyBoard = deepCopy(sudokuBoard)
 
-      if (notesMode) {
+      // Case used when the user wants to reset a cell state
+      if (newValue === 0) {
+        copyBoard[activeCell.row][activeCell.col].value = 0
+        copyBoard[activeCell.row][activeCell.col].notes = []
+      } else if (notesMode) {
         copyBoard[activeCell.row][activeCell.col].value = 0
 
         if (
@@ -52,12 +57,43 @@ export const Sudoku = () => {
         }
       } else {
         copyBoard[activeCell.row][activeCell.col].value = newValue
+
+        if (sudokuSolution[activeCell.row][activeCell.col] != newValue) {
+          setErrors((prevState) => prevState + 1)
+        }
+
+        // Loops to check if notes exists on the same box or same row or col
+        // if a number is inside notes in the cell, we will delete it
+        copyBoard.map((row, row_index) => {
+          row.map((cell, col_index) => {
+            const sameBox = checkNextActiveCellBox(
+              activeCell.row,
+              activeCell.col,
+              row_index,
+              col_index
+            )
+
+            if (
+              sameBox ||
+              col_index == activeCell.col ||
+              row_index == activeCell.row
+            ) {
+              if (cell.value == 0 && cell.notes.includes(newValue)) {
+                const index = cell.notes.findIndex((n) => n == newValue)
+                if (index > -1) {
+                  cell.notes.splice(index, 1)
+                }
+              }
+            }
+          })
+        })
+
         copyBoard[activeCell.row][activeCell.col].notes = []
       }
 
       setSudokuBoard(copyBoard)
     },
-    [activeCell, initialSudokuBoard, sudokuBoard, notesMode]
+    [activeCell, sudokuSolution, initialSudokuBoard, sudokuBoard, notesMode]
   )
 
   // Function to update de position (row and col) of the active cell
@@ -215,6 +251,7 @@ export const Sudoku = () => {
           <SudokuHeader
             difficulty={difficulty}
             updateDifficulty={updateDifficulty}
+            errors={errors}
           />
           <Board
             initialBoard={initialSudokuBoard}

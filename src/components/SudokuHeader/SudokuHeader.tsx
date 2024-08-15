@@ -1,17 +1,17 @@
-import { useState } from "react"
 import { SudokuDifficulty } from "../../constants/enum"
 import "./SudokuHeader.css"
 
 interface SudokuHeaderProps {
+  errors: number
   difficulty: SudokuDifficulty
   updateDifficulty: (newDifficulty: SudokuDifficulty) => void
 }
 
 export const SudokuHeader = ({
+  errors,
   difficulty,
   updateDifficulty,
 }: SudokuHeaderProps) => {
-  const [errors, setErrors] = useState(0)
   const getStyle = (buttonDifficulty: SudokuDifficulty) => {
     if (difficulty == buttonDifficulty) {
       return "difficulty-button-active"
@@ -23,30 +23,30 @@ export const SudokuHeader = ({
   return (
     <div className="header-container">
       <div className="difficulty-row">
-        <div>Dificultad</div>
+        <div>Difficulty</div>
         <div
           className={getStyle(SudokuDifficulty.Easy)}
           onClick={() => updateDifficulty(SudokuDifficulty.Easy)}
         >
-          Fácil
+          Easy
         </div>
         <div
           className={getStyle(SudokuDifficulty.Medium)}
           onClick={() => updateDifficulty(SudokuDifficulty.Medium)}
         >
-          Medio
+          Medium
         </div>
         <div
           className={getStyle(SudokuDifficulty.Hard)}
           onClick={() => updateDifficulty(SudokuDifficulty.Hard)}
         >
-          Difícil
+          Hard
         </div>
       </div>
       <div className="difficulty-row">
-        <div>Errores: {errors}</div>
-        <div>Puntuación: 1111</div>
-        <div>Tiempo: 00:00</div>
+        <div>Errors: {errors}</div>
+        {/*<div>Puntuación: 1111</div>*/}
+        <div>Time: 00:00</div>
       </div>
     </div>
   )

@@ -36,7 +36,7 @@ export const SudokuMenu = ({
           <button className="sudoku-button" onClick={() => updateCellValue(0)}>
             <FaEraser className="sudoku-button-icon" />
           </button>
-          <div className="sudoku-button-text">Borrar</div>
+          <div className="sudoku-button-text">Delete</div>
         </div>
         <div>
           <button
@@ -52,7 +52,7 @@ export const SudokuMenu = ({
             )}
             <GrEdit className="sudoku-button-icon" />
           </button>
-          <div className="sudoku-button-text">Notas</div>
+          <div className="sudoku-button-text">Notes</div>
         </div>
         <div>
           <button
@@ -65,7 +65,7 @@ export const SudokuMenu = ({
             </div>
             <FaRegLightbulb className="sudoku-button-icon" />
           </button>
-          <div className="sudoku-button-text">Pista</div>
+          <div className="sudoku-button-text">Clue</div>
         </div>
       </div>
       <div className="numbers">
