@@ -17,45 +17,52 @@ export const Sudoku = () => {
   const cols = 9
   const rows = 9
 
-  const updateActiveCellValue = (newValue: number) => {
-    if (initialSudokuBoard[activeCell.row][activeCell.col] != 0) {
-      return
-    }
+  // Function to update de value on the active cell
+  const updateActiveCellValue = useCallback(
+    (newValue: number) => {
+      if (initialSudokuBoard[activeCell.row][activeCell.col] != 0) {
+        return
+      }
 
-    const copyBoard = deepCopy(sudokuBoard)
+      const copyBoard = deepCopy(sudokuBoard)
 
-    copyBoard[activeCell.row][activeCell.col] = newValue
+      copyBoard[activeCell.row][activeCell.col] = newValue
 
-    setSudokuBoard(copyBoard)
-  }
+      setSudokuBoard(copyBoard)
+    },
+    [activeCell, initialSudokuBoard, sudokuBoard]
+  )
 
+  // Function to update de position (row and col) of the active cell
   const updateActiveCell = (row: number, col: number) => {
     setActiveCell({ row: row, col: col })
   }
 
+  // Function to calculate de position (row and col) of the active cell using the
+  // arrow keys, then update the position.
   const moveActiveCell = useCallback(
     (direction: string) => {
       switch (direction) {
-        case "up":
+        case "ArrowUp":
           setActiveCell({
             row: clamp(activeCell.row - 1, 0, 8),
             col: activeCell.col,
           })
 
           break
-        case "down":
+        case "ArrowDown":
           setActiveCell({
             row: clamp(activeCell.row + 1, 0, 8),
             col: activeCell.col,
           })
           break
-        case "left":
+        case "ArrowLeft":
           setActiveCell({
             row: activeCell.row,
             col: clamp(activeCell.col - 1, 0, 8),
           })
           break
-        case "right":
+        case "ArrowRight":
           setActiveCell({
             row: activeCell.row,
             col: clamp(activeCell.col + 1, 0, 8),
@@ -66,30 +73,27 @@ export const Sudoku = () => {
     [activeCell]
   )
 
+  // Function to change the dificulty of the sudoku
   const updateDifficulty = (newValue: SudokuDifficulty) => {
     setDifficulty(newValue)
   }
 
   useEffect(() => {
+    const numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    const moves = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"]
     const handleKeyDown = (event: KeyboardEvent) => {
-      switch (event.key) {
-        case "ArrowUp":
-          moveActiveCell("up")
-          break
-        case "ArrowDown":
-          moveActiveCell("down")
-          break
-        case "ArrowLeft":
-          moveActiveCell("left")
-          break
-        case "ArrowRight":
-          moveActiveCell("right")
-          break
-        default:
-          break
+      if (moves.includes(event.key)) {
+        moveActiveCell(event.key)
+      } else if (numbers.includes(event.key)) {
+        updateActiveCellValue(parseInt(event.key))
+      } else if (
+        event.key == "Backspace" ||
+        event.key == "Delete" ||
+        event.key == "0"
+      ) {
+        updateActiveCellValue(0)
       }
     }
-
     // Adde event listener
     window.addEventListener("keydown", handleKeyDown)
 
@@ -97,7 +101,7 @@ export const Sudoku = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown)
     }
-  }, [moveActiveCell])
+  }, [moveActiveCell, updateActiveCellValue])
 
   useEffect(() => {
     setLoading(true)
@@ -141,8 +145,7 @@ export const Sudoku = () => {
   return (
     <div className="sudoku-container">
       {!loading ? (
-        <>
-          <div>{activeCell.row}</div>
+        <div>
           <SudokuHeader
             difficulty={difficulty}
             updateDifficulty={updateDifficulty}
@@ -155,7 +158,7 @@ export const Sudoku = () => {
             updateActiveCell={updateActiveCell}
             updateActiveCellValue={updateActiveCellValue}
           />
-        </>
+        </div>
       ) : undefined}
     </div>
   )

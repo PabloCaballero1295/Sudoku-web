@@ -1,5 +1,6 @@
 .sudoku-menu {
   width: 20em;
+  padding-left: 1em;
 }
 
 .numbers {
@@ -19,8 +20,50 @@
   justify-content: center;
   cursor: pointer;
   border: 1px solid rgba(0, 0, 0, 0.4);
+  user-select: none;
 }
 
 .button-number:hover {
   background-color: rgb(199, 199, 164);
+}
+
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 1em;
+}
+
+.sudoku-button {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+
+  background-color: rgb(245, 245, 200);
+  border: 1px solid rgb(199, 199, 164);
+  border-radius: 100%;
+  padding: 1em;
+}
+
+.sudoku-button:active {
+  background-color: rgb(172, 172, 142) !important;
+}
+
+.sudoku-button:hover {
+  background-color: rgb(199, 199, 164);
+}
+
+.sudoku-button-icon {
+  width: 2em;
+  height: 2em;
+}
+
+.sudoku-button-text {
+  margin-top: 0.5em;
+  text-align: center;
+  user-select: none;
 }

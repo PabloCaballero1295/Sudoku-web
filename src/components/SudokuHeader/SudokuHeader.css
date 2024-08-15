@@ -3,6 +3,7 @@
   gap: 1em;
   margin-bottom: 1em;
   align-items: center;
+  user-select: none; /* Standard syntax */
 }
 
 .header-container {
