@@ -6,6 +6,7 @@ import "./Sudoku.css"
 import { SudokuHeader } from "../SudokuHeader/SudokuHeader"
 import { SudokuDifficulty } from "../../constants/enum"
 import { SUDOKU_CLUES_NUMBER } from "../../constants/constants"
+import { v4 as uuidv4 } from "uuid"
 
 export interface BoardCell {
   value: number
@@ -23,6 +24,7 @@ export const Sudoku = () => {
   const [notesMode, setNotesMode] = useState(false)
   const [clues, setClues] = useState(SUDOKU_CLUES_NUMBER)
   const [errors, setErrors] = useState(0)
+  const [sudokuId, setSudokuId] = useState(uuidv4())
 
   const cols = 9
   const rows = 9
@@ -170,6 +172,11 @@ export const Sudoku = () => {
     setClues((prevState) => prevState - 1)
   }
 
+  const startNewGame = (newDifficulty: SudokuDifficulty) => {
+    setDifficulty(newDifficulty)
+    setSudokuId(uuidv4())
+  }
+
   //This useEffect is used to handle All keyboard actions
   useEffect(() => {
     const numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
@@ -250,7 +257,7 @@ export const Sudoku = () => {
     setInitialSudokuBoard(deepCopy(sudokuBoardNumbers))
     setSudokuSolution(tempSudokuSolution)
     setLoading(false)
-  }, [difficulty])
+  }, [difficulty, sudokuId])
 
   return (
     <div className="sudoku-container">
@@ -271,6 +278,7 @@ export const Sudoku = () => {
             updateNotesMode={toggleNotesMode}
             clues={clues}
             handleClue={updateActiveCellValueWithClue}
+            startNewGame={startNewGame}
           />
         </div>
       ) : undefined}

@@ -1,6 +1,7 @@
 import { Cell } from "../Cell/Cell"
 import { BoardCell } from "../Sudoku/Sudoku"
 import { SudokuMenu } from "../SudokuMenu/SudokuMenu"
+import { SudokuDifficulty } from "../../constants/enum"
 
 import "./Board.css"
 
@@ -14,6 +15,7 @@ interface BoardProps {
   updateNotesMode: () => void
   clues: number
   handleClue: () => void
+  startNewGame: (gameDifficulty: SudokuDifficulty) => void
 }
 
 export const Board = ({
@@ -26,6 +28,7 @@ export const Board = ({
   updateNotesMode,
   clues,
   handleClue,
+  startNewGame,
 }: BoardProps) => {
   return (
     <div className="sudoku-container">
@@ -57,6 +60,7 @@ export const Board = ({
           updateNotesMode={updateNotesMode}
           clues={clues}
           handleClue={handleClue}
+          startNewGame={startNewGame}
         />
       </div>
     </div>

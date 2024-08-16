@@ -3,6 +3,8 @@ import { GrEdit } from "react-icons/gr"
 import { FaEraser } from "react-icons/fa"
 import { FaRegLightbulb } from "react-icons/fa"
 import { TbArrowBackUp } from "react-icons/tb"
+import { NewGameModal } from "../Modal/NewGameModal"
+import { SudokuDifficulty } from "../../constants/enum"
 
 interface SudokuMenuProps {
   updateActiveCell: (newValue: number) => void
@@ -10,6 +12,7 @@ interface SudokuMenuProps {
   updateNotesMode: () => void
   clues: number
   handleClue: () => void
+  startNewGame: (gameDifficulty: SudokuDifficulty) => void
 }
 
 export const SudokuMenu = ({
@@ -18,6 +21,7 @@ export const SudokuMenu = ({
   updateNotesMode,
   clues,
   handleClue,
+  startNewGame,
 }: SudokuMenuProps) => {
   const updateCellValue = (newValue: number) => {
     updateActiveCell(newValue)
@@ -78,6 +82,9 @@ export const SudokuMenu = ({
             {index + 1}
           </div>
         ))}
+      </div>
+      <div className="bottom-row-menu">
+        <NewGameModal startNewGame={startNewGame} />
       </div>
     </div>
   )
