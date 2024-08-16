@@ -3,7 +3,7 @@ import { GrEdit } from "react-icons/gr"
 import { FaEraser } from "react-icons/fa"
 import { FaRegLightbulb } from "react-icons/fa"
 import { TbArrowBackUp } from "react-icons/tb"
-import { NewGameModal } from "../Modal/NewGameModal"
+import { NewGameModal } from "../Modal/NewGameModal/NewGameModal"
 import { SudokuDifficulty } from "../../constants/enum"
 
 interface SudokuMenuProps {
