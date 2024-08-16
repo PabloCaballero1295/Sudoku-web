@@ -1,48 +1,27 @@
 import { SudokuDifficulty } from "../../constants/enum"
+import { ChangeDifficultyModal } from "../Modal/ChangeDifficultyModal/ChangeDifficultyModal"
+import { ResetGameModal } from "../Modal/ResetGameModal/ResetGameModal"
 import "./SudokuHeader.css"
 
 interface SudokuHeaderProps {
   errors: number
-  difficulty: SudokuDifficulty
-  updateDifficulty: (newDifficulty: SudokuDifficulty) => void
+  startNewGame: (gameDifficulty: SudokuDifficulty) => void
+  resetGame: () => void
 }
 
 export const SudokuHeader = ({
   errors,
-  difficulty,
-  updateDifficulty,
+  startNewGame,
+  resetGame,
 }: SudokuHeaderProps) => {
-  const getStyle = (buttonDifficulty: SudokuDifficulty) => {
-    if (difficulty == buttonDifficulty) {
-      return "difficulty-button-active"
-    } else {
-      return "difficulty-button"
-    }
-  }
-
   return (
     <div className="header-container">
       <div className="difficulty-row">
         <div>Difficulty</div>
-        <div
-          className={getStyle(SudokuDifficulty.Easy)}
-          onClick={() => updateDifficulty(SudokuDifficulty.Easy)}
-        >
-          Easy
-        </div>
-        <div
-          className={getStyle(SudokuDifficulty.Medium)}
-          onClick={() => updateDifficulty(SudokuDifficulty.Medium)}
-        >
-          Medium
-        </div>
-        <div
-          className={getStyle(SudokuDifficulty.Hard)}
-          onClick={() => updateDifficulty(SudokuDifficulty.Hard)}
-        >
-          Hard
-        </div>
+        <ChangeDifficultyModal startNewGame={startNewGame} />
+        <ResetGameModal resetGame={resetGame} />
       </div>
+
       <div className="difficulty-row">
         <div>Errors: {errors}</div>
         {/*<div>Puntuación: 1111</div>*/}

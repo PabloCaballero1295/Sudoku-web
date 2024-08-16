@@ -142,9 +142,23 @@ export const Sudoku = () => {
     [activeCell]
   )
 
-  // Function to change the dificulty of the sudoku
-  const updateDifficulty = (newValue: SudokuDifficulty) => {
-    setDifficulty(newValue)
+  const resetGame = () => {
+    const newSudokuBoard: BoardCell[][] = []
+
+    for (let row = 0; row < rows; row++) {
+      newSudokuBoard[row] = []
+      for (let col = 0; col < cols; col++) {
+        newSudokuBoard[row].push({
+          value: initialSudokuBoard[row][col],
+          notes: [],
+          readonly: initialSudokuBoard[row][col] != 0 ? true : false,
+        })
+      }
+    }
+
+    setSudokuBoard(deepCopy(newSudokuBoard))
+
+    setClues(SUDOKU_CLUES_NUMBER)
   }
 
   // Function to change de boolean value
@@ -264,9 +278,9 @@ export const Sudoku = () => {
       {!loading ? (
         <div>
           <SudokuHeader
-            difficulty={difficulty}
-            updateDifficulty={updateDifficulty}
             errors={errors}
+            startNewGame={startNewGame}
+            resetGame={resetGame}
           />
           <Board
             solution={sudokuSolution}
