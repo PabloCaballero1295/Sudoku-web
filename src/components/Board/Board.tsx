@@ -5,7 +5,6 @@ import { SudokuMenu } from "../SudokuMenu/SudokuMenu"
 import "./Board.css"
 
 interface BoardProps {
-  initialBoard: number[][]
   solution: number[][]
   board: BoardCell[][]
   activeCell: { row: number; col: number }
@@ -18,7 +17,6 @@ interface BoardProps {
 }
 
 export const Board = ({
-  initialBoard,
   solution,
   board,
   activeCell,
@@ -44,7 +42,7 @@ export const Board = ({
                     value={col.value}
                     notes={col.notes}
                     solutionValue={solution[row_n][col_n]}
-                    readOnly={initialBoard[row_n][col_n] != 0 ? true : false}
+                    readOnly={col.readonly}
                     activeCell={activeCell}
                     updateActiveCell={updateActiveCell}
                   />

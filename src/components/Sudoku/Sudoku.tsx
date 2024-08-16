@@ -10,6 +10,7 @@ import { SUDOKU_CLUES_NUMBER } from "../../constants/constants"
 export interface BoardCell {
   value: number
   notes: number[]
+  readonly: boolean
 }
 
 export const Sudoku = () => {
@@ -28,8 +29,8 @@ export const Sudoku = () => {
 
   // Function to update de value on the active cell
   const updateActiveCellValue = useCallback(
-    (newValue: number) => {
-      if (initialSudokuBoard[activeCell.row][activeCell.col] != 0) {
+    (newValue: number, isClue?: boolean) => {
+      if (sudokuBoard[activeCell.row][activeCell.col].readonly) {
         return
       }
 
@@ -39,7 +40,7 @@ export const Sudoku = () => {
       if (newValue === 0) {
         copyBoard[activeCell.row][activeCell.col].value = 0
         copyBoard[activeCell.row][activeCell.col].notes = []
-      } else if (notesMode) {
+      } else if (notesMode && !isClue) {
         copyBoard[activeCell.row][activeCell.col].value = 0
 
         if (
@@ -57,6 +58,9 @@ export const Sudoku = () => {
         }
       } else {
         copyBoard[activeCell.row][activeCell.col].value = newValue
+        if (isClue) {
+          copyBoard[activeCell.row][activeCell.col].readonly = true
+        }
 
         if (sudokuSolution[activeCell.row][activeCell.col] != newValue) {
           setErrors((prevState) => prevState + 1)
@@ -93,7 +97,7 @@ export const Sudoku = () => {
 
       setSudokuBoard(copyBoard)
     },
-    [activeCell, sudokuSolution, initialSudokuBoard, sudokuBoard, notesMode]
+    [activeCell, sudokuSolution, sudokuBoard, notesMode]
   )
 
   // Function to update de position (row and col) of the active cell
@@ -155,14 +159,14 @@ export const Sudoku = () => {
     const row = activeCell.row
     const col = activeCell.col
 
-    if (initialSudokuBoard[row][col] !== 0) {
+    if (sudokuBoard[row][col].readonly) {
       return
     } else if (sudokuSolution[row][col] === sudokuBoard[row][col].value) {
       return
     }
 
     const solutionValue = sudokuSolution[row][col]
-    updateActiveCellValue(solutionValue)
+    updateActiveCellValue(solutionValue, true)
     setClues((prevState) => prevState - 1)
   }
 
@@ -210,9 +214,13 @@ export const Sudoku = () => {
       sudokuNumbers[i] = []
       for (let j = 0; j < cols; j++) {
         if (puzzle[n] == "-") {
-          sudokuNumbers[i][j] = { value: 0, notes: [] }
+          sudokuNumbers[i][j] = { value: 0, notes: [], readonly: false }
         } else {
-          sudokuNumbers[i][j] = { value: parseInt(puzzle[n]), notes: [] }
+          sudokuNumbers[i][j] = {
+            value: parseInt(puzzle[n]),
+            notes: [],
+            readonly: true,
+          }
         }
         n++
       }
@@ -254,7 +262,6 @@ export const Sudoku = () => {
             errors={errors}
           />
           <Board
-            initialBoard={initialSudokuBoard}
             solution={sudokuSolution}
             board={sudokuBoard}
             activeCell={activeCell}
