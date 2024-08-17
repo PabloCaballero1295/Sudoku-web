@@ -2,19 +2,22 @@ import { useState } from "react"
 import "./ChangeDifficultyModal.css"
 import { SudokuDifficulty } from "../../../constants/enum"
 import { ModalBox } from "../ModalBox/ModalBox"
+import { createSudoku } from "../../../redux/sudokuSlice"
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks"
 
-interface ChangeDifficultyModalProps {
-  startNewGame: (gameDifficulty: SudokuDifficulty) => void
-}
-
-export const ChangeDifficultyModal = ({
-  startNewGame: startNewGame,
-}: ChangeDifficultyModalProps) => {
+export const ChangeDifficultyModal = () => {
   const [open, setOpen] = useState(false)
-  const [difficulty, setDifficulty] = useState(SudokuDifficulty.Easy)
+  //const [difficulty, setDifficulty] = useState(SudokuDifficulty.Easy)
   const [difficultyCLicked, setDifficultyClicked] = useState(
     SudokuDifficulty.Easy
   )
+
+  const difficulty = useAppSelector((state) => state.sudoku.difficulty)
+  const dispatch = useAppDispatch()
+
+  const startNewGame = () => {
+    dispatch(createSudoku(difficultyCLicked))
+  }
 
   const handleOpen = (difficultySelection: SudokuDifficulty) => {
     setOpen(true)
@@ -26,8 +29,8 @@ export const ChangeDifficultyModal = ({
   }
 
   const handleStartNewGame = () => {
-    setDifficulty(difficultyCLicked)
-    startNewGame(difficulty)
+    //setDifficulty(difficultyCLicked)
+    startNewGame()
   }
 
   const getStyle = (buttonDifficulty: SudokuDifficulty) => {

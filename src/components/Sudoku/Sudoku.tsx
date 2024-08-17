@@ -1,12 +1,18 @@
-import { useState, useEffect, useCallback } from "react"
+import { useEffect, useCallback } from "react"
 import { Board } from "../Board/Board"
-import { getSudoku } from "sudoku-gen"
 import { checkNextActiveCellBox, clamp, deepCopy } from "../../utils/utils"
 import "./Sudoku.css"
 import { SudokuHeader } from "../SudokuHeader/SudokuHeader"
 import { SudokuDifficulty } from "../../constants/enum"
-import { SUDOKU_CLUES_NUMBER } from "../../constants/constants"
-import { v4 as uuidv4 } from "uuid"
+import { useAppSelector, useAppDispatch } from "../../redux/hooks"
+import {
+  updateSudokuBoard,
+  updateSudokuErrors,
+  updateSudokuActiveCell,
+  updateSudokuNotesMode,
+  updateSudokuClues,
+  createSudoku,
+} from "../../redux/sudokuSlice"
 
 export interface BoardCell {
   value: number
@@ -15,19 +21,15 @@ export interface BoardCell {
 }
 
 export const Sudoku = () => {
-  const [initialSudokuBoard, setInitialSudokuBoard] = useState<number[][]>([])
-  const [sudokuBoard, setSudokuBoard] = useState<BoardCell[][]>([])
-  const [sudokuSolution, setSudokuSolution] = useState<number[][]>([])
-  const [loading, setLoading] = useState(true)
-  const [activeCell, setActiveCell] = useState({ row: 0, col: 0 })
-  const [difficulty, setDifficulty] = useState(SudokuDifficulty.Easy)
-  const [notesMode, setNotesMode] = useState(false)
-  const [clues, setClues] = useState(SUDOKU_CLUES_NUMBER)
-  const [errors, setErrors] = useState(0)
-  const [sudokuId, setSudokuId] = useState(uuidv4())
+  const sudoku = useAppSelector((state) => state.sudoku)
+  const dispatch = useAppDispatch()
 
-  const cols = 9
-  const rows = 9
+  const sudokuBoard = sudoku.board
+  const sudokuSolution = sudoku.solution
+  const activeCell = sudoku.activeCell
+  const notesMode = sudoku.notesMode
+  const clues = sudoku.clues
+  const errors = sudoku.errors
 
   // Function to update de value on the active cell
   const updateActiveCellValue = useCallback(
@@ -65,7 +67,7 @@ export const Sudoku = () => {
         }
 
         if (sudokuSolution[activeCell.row][activeCell.col] != newValue) {
-          setErrors((prevState) => prevState + 1)
+          dispatch(updateSudokuErrors(errors + 1))
         }
 
         // Loops to check if notes exists on the same box or same row or col
@@ -97,14 +99,15 @@ export const Sudoku = () => {
         copyBoard[activeCell.row][activeCell.col].notes = []
       }
 
-      setSudokuBoard(copyBoard)
+      dispatch(updateSudokuBoard(copyBoard))
     },
-    [activeCell, sudokuSolution, sudokuBoard, notesMode]
+    [activeCell, sudokuSolution, sudokuBoard, notesMode, dispatch, errors]
   )
 
   // Function to update de position (row and col) of the active cell
   const updateActiveCell = (row: number, col: number) => {
-    setActiveCell({ row: row, col: col })
+    dispatch(updateSudokuActiveCell({ row: row, col: col }))
+    //setActiveCell({ row: row, col: col })
   }
 
   // Function to calculate de position (row and col) of the active cell using the
@@ -113,58 +116,47 @@ export const Sudoku = () => {
     (direction: string) => {
       switch (direction) {
         case "ArrowUp":
-          setActiveCell({
-            row: clamp(activeCell.row - 1, 0, 8),
-            col: activeCell.col,
-          })
+          dispatch(
+            updateSudokuActiveCell({
+              row: clamp(activeCell.row - 1, 0, 8),
+              col: activeCell.col,
+            })
+          )
 
           break
         case "ArrowDown":
-          setActiveCell({
-            row: clamp(activeCell.row + 1, 0, 8),
-            col: activeCell.col,
-          })
+          dispatch(
+            updateSudokuActiveCell({
+              row: clamp(activeCell.row + 1, 0, 8),
+              col: activeCell.col,
+            })
+          )
           break
         case "ArrowLeft":
-          setActiveCell({
-            row: activeCell.row,
-            col: clamp(activeCell.col - 1, 0, 8),
-          })
+          dispatch(
+            updateSudokuActiveCell({
+              row: activeCell.row,
+              col: clamp(activeCell.col - 1, 0, 8),
+            })
+          )
           break
         case "ArrowRight":
-          setActiveCell({
-            row: activeCell.row,
-            col: clamp(activeCell.col + 1, 0, 8),
-          })
+          dispatch(
+            updateSudokuActiveCell({
+              row: activeCell.row,
+              col: clamp(activeCell.col + 1, 0, 8),
+            })
+          )
           break
       }
     },
-    [activeCell]
+    [dispatch, activeCell.row, activeCell.col]
   )
-
-  const resetGame = () => {
-    const newSudokuBoard: BoardCell[][] = []
-
-    for (let row = 0; row < rows; row++) {
-      newSudokuBoard[row] = []
-      for (let col = 0; col < cols; col++) {
-        newSudokuBoard[row].push({
-          value: initialSudokuBoard[row][col],
-          notes: [],
-          readonly: initialSudokuBoard[row][col] != 0 ? true : false,
-        })
-      }
-    }
-
-    setSudokuBoard(deepCopy(newSudokuBoard))
-
-    setClues(SUDOKU_CLUES_NUMBER)
-  }
 
   // Function to change de boolean value
   const toggleNotesMode = useCallback(() => {
-    setNotesMode(!notesMode)
-  }, [notesMode])
+    dispatch(updateSudokuNotesMode(sudoku.notesMode))
+  }, [sudoku.notesMode, dispatch])
 
   //Function to update a cell value when the user clicks on clue button
   const updateActiveCellValueWithClue = () => {
@@ -183,12 +175,7 @@ export const Sudoku = () => {
 
     const solutionValue = sudokuSolution[row][col]
     updateActiveCellValue(solutionValue, true)
-    setClues((prevState) => prevState - 1)
-  }
-
-  const startNewGame = (newDifficulty: SudokuDifficulty) => {
-    setDifficulty(newDifficulty)
-    setSudokuId(uuidv4())
+    dispatch(updateSudokuClues(sudoku.clues - 1))
   }
 
   //This useEffect is used to handle All keyboard actions
@@ -220,82 +207,28 @@ export const Sudoku = () => {
   }, [moveActiveCell, updateActiveCellValue, toggleNotesMode])
 
   useEffect(() => {
-    setLoading(true)
-
-    const sudoku = getSudoku(difficulty)
-
-    const solution = sudoku.solution
-    const puzzle = sudoku.puzzle
-
-    const sudokuNumbers: BoardCell[][] = []
-    const tempSudokuSolution: number[][] = []
-    let n = 0
-
-    for (let i = 0; i < rows; i++) {
-      sudokuNumbers[i] = []
-      for (let j = 0; j < cols; j++) {
-        if (puzzle[n] == "-") {
-          sudokuNumbers[i][j] = { value: 0, notes: [], readonly: false }
-        } else {
-          sudokuNumbers[i][j] = {
-            value: parseInt(puzzle[n]),
-            notes: [],
-            readonly: true,
-          }
-        }
-        n++
-      }
+    console.log(sudoku)
+    if (sudoku.id == "") {
+      dispatch(createSudoku(SudokuDifficulty.Easy))
     }
-
-    n = 0
-
-    for (let i = 0; i < rows; i++) {
-      tempSudokuSolution[i] = []
-      for (let j = 0; j < cols; j++) {
-        tempSudokuSolution[i][j] = parseInt(solution[n])
-        n++
-      }
-    }
-    setClues(SUDOKU_CLUES_NUMBER)
-    setSudokuBoard(sudokuNumbers)
-
-    const sudokuBoardNumbers: number[][] = []
-
-    sudokuNumbers.map((row, i) => {
-      sudokuBoardNumbers[i] = []
-      row.map((_, j) => {
-        sudokuBoardNumbers[i].push(sudokuNumbers[i][j].value)
-      })
-    })
-
-    setInitialSudokuBoard(deepCopy(sudokuBoardNumbers))
-    setSudokuSolution(tempSudokuSolution)
-    setLoading(false)
-  }, [difficulty, sudokuId])
+  }, [sudoku, dispatch])
 
   return (
     <div className="sudoku-container">
-      {!loading ? (
-        <div>
-          <SudokuHeader
-            errors={errors}
-            startNewGame={startNewGame}
-            resetGame={resetGame}
-          />
-          <Board
-            solution={sudokuSolution}
-            board={sudokuBoard}
-            activeCell={activeCell}
-            updateActiveCell={updateActiveCell}
-            updateActiveCellValue={updateActiveCellValue}
-            notesMode={notesMode}
-            updateNotesMode={toggleNotesMode}
-            clues={clues}
-            handleClue={updateActiveCellValueWithClue}
-            startNewGame={startNewGame}
-          />
-        </div>
-      ) : undefined}
+      <div>
+        <SudokuHeader />
+        <Board
+          solution={sudokuSolution}
+          board={sudokuBoard}
+          activeCell={activeCell}
+          updateActiveCell={updateActiveCell}
+          updateActiveCellValue={updateActiveCellValue}
+          notesMode={notesMode}
+          updateNotesMode={toggleNotesMode}
+          clues={clues}
+          handleClue={updateActiveCellValueWithClue}
+        />
+      </div>
     </div>
   )
 }

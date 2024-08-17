@@ -4,6 +4,8 @@ import { SudokuMenu } from "../SudokuMenu/SudokuMenu"
 import { SudokuDifficulty } from "../../constants/enum"
 
 import "./Board.css"
+import { useAppDispatch } from "../../redux/hooks"
+import { createSudoku } from "../../redux/sudokuSlice"
 
 interface BoardProps {
   solution: number[][]
@@ -15,7 +17,6 @@ interface BoardProps {
   updateNotesMode: () => void
   clues: number
   handleClue: () => void
-  startNewGame: (gameDifficulty: SudokuDifficulty) => void
 }
 
 export const Board = ({
@@ -28,8 +29,13 @@ export const Board = ({
   updateNotesMode,
   clues,
   handleClue,
-  startNewGame,
 }: BoardProps) => {
+  const dispatch = useAppDispatch()
+
+  const startNewGame = (newDifficulty: SudokuDifficulty) => {
+    dispatch(createSudoku(newDifficulty))
+  }
+
   return (
     <div className="sudoku-container">
       <div className="sudoku-flex">

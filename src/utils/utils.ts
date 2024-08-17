@@ -1,3 +1,10 @@
+import { SudokuDifficulty } from "../constants/enum"
+import { getSudoku } from "sudoku-gen"
+import { BoardCell } from "../../src/components/Sudoku/Sudoku"
+import { SUDOKU_CLUES_NUMBER } from "../constants/constants"
+import { v4 as uuidv4 } from "uuid"
+import { SudokuState } from "../types"
+
 export function deepCopy<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj))
 }
@@ -20,3 +27,84 @@ export const checkNextActiveCellBox = (
 
 export const clamp = (val: number, min: number, max: number) =>
   Math.min(Math.max(val, min), max)
+
+export const resetSudokuGame = (sudokuData: SudokuState) => {
+  const newSudokuData = deepCopy(sudokuData)
+
+  const newSudokuBoard: BoardCell[][] = []
+
+  for (let row = 0; row < 9; row++) {
+    newSudokuBoard[row] = []
+    for (let col = 0; col < 9; col++) {
+      newSudokuBoard[row].push({
+        value: sudokuData.initialBoard[row][col],
+        notes: [],
+        readonly: sudokuData.initialBoard[row][col] != 0 ? true : false,
+      })
+    }
+  }
+
+  newSudokuData.clues = SUDOKU_CLUES_NUMBER
+  newSudokuData.board = deepCopy(newSudokuBoard)
+
+  return newSudokuData
+}
+
+export const createSudokuWithDifficulty = (difficulty: SudokuDifficulty) => {
+  const id = uuidv4()
+  const sudoku = getSudoku(difficulty)
+
+  const solution = sudoku.solution
+  const puzzle = sudoku.puzzle
+
+  const sudokuBoard: BoardCell[][] = []
+  const sudokuSolution: number[][] = []
+  let n = 0
+
+  for (let i = 0; i < 9; i++) {
+    sudokuBoard[i] = []
+    for (let j = 0; j < 9; j++) {
+      if (puzzle[n] == "-") {
+        sudokuBoard[i][j] = { value: 0, notes: [], readonly: false }
+      } else {
+        sudokuBoard[i][j] = {
+          value: parseInt(puzzle[n]),
+          notes: [],
+          readonly: true,
+        }
+      }
+      n++
+    }
+  }
+
+  n = 0
+
+  for (let i = 0; i < 9; i++) {
+    sudokuSolution[i] = []
+    for (let j = 0; j < 9; j++) {
+      sudokuSolution[i][j] = parseInt(solution[n])
+      n++
+    }
+  }
+
+  const sudokuBoardNumbers: number[][] = []
+
+  sudokuBoard.map((row, i) => {
+    sudokuBoardNumbers[i] = []
+    row.map((_, j) => {
+      sudokuBoardNumbers[i].push(sudokuBoard[i][j].value)
+    })
+  })
+
+  return {
+    id: id,
+    board: deepCopy(sudokuBoard),
+    initialBoard: deepCopy(sudokuBoardNumbers),
+    solution: deepCopy(sudokuSolution),
+    activeCell: { row: 0, col: 0 },
+    difficulty: difficulty,
+    notesMode: false,
+    clues: SUDOKU_CLUES_NUMBER,
+    errors: 0,
+  }
+}
