@@ -8,23 +8,30 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import {
   sudokuUseClue,
   updateSudokuActiveCellValue,
-  updateSudokuNotesMode,
 } from "../../redux/sudokuSlice"
+import { toggleNotesMode } from "../../redux/sudokuToolsSlice"
 
 export const SudokuMenu = () => {
   const sudoku = useAppSelector((state) => state.sudoku)
+  const sudokuTools = useAppSelector((state) => state.sudokuTools)
   const dispatch = useAppDispatch()
 
   const updateCellValue = (newValue: number) => {
-    dispatch(updateSudokuActiveCellValue(newValue))
+    dispatch(
+      updateSudokuActiveCellValue({
+        newValue: newValue,
+        activeCell: sudokuTools.activeCell,
+        notesMode: sudokuTools.notesMode,
+      })
+    )
   }
 
   const handleClueButton = () => {
-    dispatch(sudokuUseClue())
+    dispatch(sudokuUseClue(sudokuTools.activeCell))
   }
 
-  const toggleNotesMode = () => {
-    dispatch(updateSudokuNotesMode(!sudoku.notesMode))
+  const handleNotesButton = () => {
+    dispatch(toggleNotesMode())
   }
 
   return (
@@ -45,11 +52,11 @@ export const SudokuMenu = () => {
         <div>
           <button
             className={`sudoku-button ${
-              sudoku.notesMode ? "notes-button-border" : undefined
+              sudokuTools.notesMode ? "notes-button-border" : undefined
             }`}
-            onClick={toggleNotesMode}
+            onClick={handleNotesButton}
           >
-            {sudoku.notesMode ? (
+            {sudokuTools.notesMode ? (
               <div className="notes-mode on">On</div>
             ) : (
               <div className="notes-mode off">Off</div>

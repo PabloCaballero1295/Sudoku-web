@@ -16,9 +16,7 @@ export interface SudokuState {
   board: BoardCell[][]
   initialBoard: number[][]
   solution: number[][]
-  activeCell: CellPos
   difficulty: SudokuDifficulty
-  notesMode: boolean
   clues: number
   errors: number
 }

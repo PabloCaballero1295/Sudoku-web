@@ -18,9 +18,7 @@ const initialState: SudokuState = {
   board: [],
   initialBoard: [],
   solution: [],
-  activeCell: { row: 0, col: 0 },
   difficulty: SudokuDifficulty.Easy,
-  notesMode: false,
   clues: SUDOKU_CLUES_NUMBER,
   errors: 0,
 }
@@ -44,23 +42,19 @@ export const sudokuSlice = createSlice({
       state.board = sudokuData.board
       state.initialBoard = sudokuData.initialBoard
       state.solution = sudokuData.solution
-      state.activeCell = sudokuData.activeCell
       state.difficulty = sudokuData.difficulty
-      state.notesMode = sudokuData.notesMode
       state.clues = sudokuData.clues
       state.errors = sudokuData.errors
 
       saveStateOnLocalStorage(state)
     },
     updateSudoku: (state, action) => {
-      const { id, board, solution, difficulty, notesMode, clues, errors } =
-        action.payload
+      const { id, board, solution, difficulty, clues, errors } = action.payload
 
       state.id = id
       state.board = board
       state.solution = solution
       state.difficulty = difficulty
-      state.notesMode = notesMode
       state.clues = clues
       state.errors = errors
 
@@ -69,16 +63,6 @@ export const sudokuSlice = createSlice({
     updateSudokuBoard: (state, action) => {
       const board = action.payload
       state.board = board
-      saveStateOnLocalStorage(state)
-    },
-    updateSudokuActiveCell: (state, action) => {
-      const activeCell = action.payload
-      state.activeCell = activeCell
-      saveStateOnLocalStorage(state)
-    },
-    updateSudokuNotesMode: (state, action) => {
-      const notesMode = action.payload
-      state.notesMode = notesMode
       saveStateOnLocalStorage(state)
     },
     updateSudokuClues: (state, action) => {
@@ -97,15 +81,13 @@ export const sudokuSlice = createSlice({
       state.board = resetData.board
       state.initialBoard = resetData.initialBoard
       state.solution = resetData.solution
-      state.activeCell = resetData.activeCell
       state.difficulty = resetData.difficulty
-      state.notesMode = resetData.notesMode
       state.clues = resetData.clues
       state.errors = resetData.errors
       saveStateOnLocalStorage(state)
     },
-    sudokuUseClue: (state) => {
-      const activeCell = state.activeCell
+    sudokuUseClue: (state, action) => {
+      const activeCell = action.payload
       state.board[activeCell.row][activeCell.col].value =
         state.solution[activeCell.row][activeCell.col]
       state.board[activeCell.row][activeCell.col].notes = []
@@ -114,8 +96,7 @@ export const sudokuSlice = createSlice({
       saveStateOnLocalStorage(state)
     },
     updateSudokuActiveCellValue: (state, action) => {
-      const newValue = action.payload
-      const activeCell = state.activeCell
+      const { newValue, activeCell, notesMode } = action.payload
 
       if (state.board[activeCell.row][activeCell.col].readonly) {
         return
@@ -127,7 +108,7 @@ export const sudokuSlice = createSlice({
       if (newValue === 0) {
         copyBoard[activeCell.row][activeCell.col].value = 0
         copyBoard[activeCell.row][activeCell.col].notes = []
-      } else if (state.notesMode) {
+      } else if (notesMode) {
         copyBoard[activeCell.row][activeCell.col].value = 0
 
         if (
@@ -188,8 +169,6 @@ export const {
   updateSudoku,
   updateSudokuBoard,
   updateSudokuActiveCellValue,
-  updateSudokuActiveCell,
-  updateSudokuNotesMode,
   updateSudokuClues,
   updateSudokuErrors,
   resetSudoku,

@@ -6,11 +6,10 @@ import { SudokuHeader } from "../SudokuHeader/SudokuHeader"
 import { SudokuDifficulty } from "../../constants/enum"
 import { useAppSelector, useAppDispatch } from "../../redux/hooks"
 import {
-  updateSudokuActiveCell,
-  updateSudokuNotesMode,
   createSudoku,
   updateSudokuActiveCellValue,
 } from "../../redux/sudokuSlice"
+import { toggleNotesMode, updateActiveCell } from "../../redux/sudokuToolsSlice"
 
 export interface BoardCell {
   value: number
@@ -20,9 +19,10 @@ export interface BoardCell {
 
 export const Sudoku = () => {
   const sudoku = useAppSelector((state) => state.sudoku)
+  const sudokuTools = useAppSelector((state) => state.sudokuTools)
   const dispatch = useAppDispatch()
 
-  const activeCell = sudoku.activeCell
+  const activeCell = sudokuTools.activeCell
 
   // Function to calculate de position (row and col) of the active cell using the
   // arrow keys, then update the position.
@@ -31,7 +31,7 @@ export const Sudoku = () => {
       switch (direction) {
         case "ArrowUp":
           dispatch(
-            updateSudokuActiveCell({
+            updateActiveCell({
               row: clamp(activeCell.row - 1, 0, 8),
               col: activeCell.col,
             })
@@ -40,7 +40,7 @@ export const Sudoku = () => {
           break
         case "ArrowDown":
           dispatch(
-            updateSudokuActiveCell({
+            updateActiveCell({
               row: clamp(activeCell.row + 1, 0, 8),
               col: activeCell.col,
             })
@@ -48,7 +48,7 @@ export const Sudoku = () => {
           break
         case "ArrowLeft":
           dispatch(
-            updateSudokuActiveCell({
+            updateActiveCell({
               row: activeCell.row,
               col: clamp(activeCell.col - 1, 0, 8),
             })
@@ -56,7 +56,7 @@ export const Sudoku = () => {
           break
         case "ArrowRight":
           dispatch(
-            updateSudokuActiveCell({
+            updateActiveCell({
               row: activeCell.row,
               col: clamp(activeCell.col + 1, 0, 8),
             })
@@ -68,9 +68,9 @@ export const Sudoku = () => {
   )
 
   // Function to change de boolean value
-  const toggleNotesMode = useCallback(() => {
-    dispatch(updateSudokuNotesMode(sudoku.notesMode))
-  }, [sudoku.notesMode, dispatch])
+  const handleNotesModeButton = useCallback(() => {
+    dispatch(toggleNotesMode())
+  }, [dispatch])
 
   //This useEffect is used to handle All keyboard actions
   useEffect(() => {
@@ -80,15 +80,27 @@ export const Sudoku = () => {
       if (moves.includes(event.key)) {
         moveActiveCell(event.key)
       } else if (numbers.includes(event.key)) {
-        dispatch(updateSudokuActiveCellValue(parseInt(event.key)))
+        dispatch(
+          updateSudokuActiveCellValue({
+            newValue: parseInt(event.key),
+            activeCell: activeCell,
+            notesMode: sudokuTools.notesMode,
+          })
+        )
       } else if (
         event.key == "Backspace" ||
         event.key == "Delete" ||
         event.key == "0"
       ) {
-        dispatch(updateSudokuActiveCellValue(0))
+        dispatch(
+          updateSudokuActiveCellValue({
+            newValue: 0,
+            activeCell: activeCell,
+            notesMode: sudokuTools.notesMode,
+          })
+        )
       } else if (event.key == "n") {
-        toggleNotesMode()
+        handleNotesModeButton()
       }
     }
     // Adde event listener
@@ -98,7 +110,13 @@ export const Sudoku = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown)
     }
-  }, [moveActiveCell, toggleNotesMode, dispatch])
+  }, [
+    moveActiveCell,
+    handleNotesModeButton,
+    dispatch,
+    activeCell,
+    sudokuTools.notesMode,
+  ])
 
   useEffect(() => {
     if (sudoku.id == "") {

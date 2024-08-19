@@ -2,7 +2,8 @@ import { useEffect, useState } from "react"
 import "./Cell.css"
 import { checkNextActiveCellBox } from "../../utils/utils"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
-import { updateSudokuActiveCell } from "../../redux/sudokuSlice"
+//import { updateSudokuActiveCell } from "../../redux/sudokuSlice"
+import { updateActiveCell } from "../../redux/sudokuToolsSlice"
 
 interface CellProps {
   row: number
@@ -21,7 +22,10 @@ export const Cell = ({
   solutionValue,
   readOnly,
 }: CellProps) => {
-  const sudoku = useAppSelector((state) => state.sudoku)
+  //const sudoku = useAppSelector((state) => state.sudoku)
+  const sudokuTools = useAppSelector((state) => state.sudokuTools)
+  const activeCell = sudokuTools.activeCell
+
   const dispatch = useAppDispatch()
 
   const [cellValue, setCellValue] = useState(value)
@@ -40,7 +44,8 @@ export const Cell = ({
 
   const handleClick = () => {
     //updateActiveCell(row, col)
-    dispatch(updateSudokuActiveCell({ row: row, col: col }))
+    //dispatch(updateSudokuActiveCell({ row: row, col: col }))
+    dispatch(updateActiveCell({ row: row, col: col }))
   }
 
   const getCellStyle = () => {
@@ -58,17 +63,12 @@ export const Cell = ({
       cellStyle += " read-only"
     }
 
-    if (sudoku.activeCell.row == row && sudoku.activeCell.col == col) {
+    if (activeCell.row == row && activeCell.col == col) {
       cellStyle += " active-cell"
-    } else if (sudoku.activeCell.row == row || sudoku.activeCell.col == col) {
+    } else if (activeCell.row == row || activeCell.col == col) {
       cellStyle += " active-cell-row-col"
     } else if (
-      checkNextActiveCellBox(
-        sudoku.activeCell.row,
-        sudoku.activeCell.col,
-        row,
-        col
-      )
+      checkNextActiveCellBox(activeCell.row, activeCell.col, row, col)
     ) {
       cellStyle += " active-cell-row-col"
     }
