@@ -98,7 +98,7 @@ export const SudokuMenu = () => {
         ))}
       </div>
 
-      {screenSize.width >= 768 ? (
+      {screenSize.width > 768 ? (
         <div className="bottom-row-menu">
           <NewGameModal />
         </div>
