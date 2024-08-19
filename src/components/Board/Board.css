@@ -18,3 +18,35 @@
 .board-row {
   display: flex;
 }
+
+@media (width <= 360px) {
+  .board {
+    width: auto;
+    border: 2px solid black;
+  }
+  .sudoku-flex {
+    flex-direction: column;
+    /*background-color: red;*/
+  }
+}
+
+@media (360px < width <= 480px) {
+  .board {
+    width: auto;
+  }
+  .sudoku-flex {
+    flex-direction: column;
+    /*background-color: green;*/
+  }
+}
+
+@media (480px < width <= 768px) {
+  .board {
+    width: 30em;
+    margin: auto;
+  }
+  .sudoku-flex {
+    flex-direction: column;
+    /*background-color: yellow;*/
+  }
+}

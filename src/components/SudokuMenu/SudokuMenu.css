@@ -117,3 +117,108 @@
   display: flex;
   flex-direction: column;
 }
+
+@media (width <= 360px) {
+  .sudoku-menu {
+    width: auto;
+    padding-left: 0;
+  }
+
+  .button-row {
+    justify-content: space-around;
+    width: auto;
+    margin: 0.5em 1em;
+  }
+  .sudoku-button {
+    font-size: 0.6em;
+    padding: 0.5em;
+  }
+
+  .sudoku-button-text {
+    display: none;
+  }
+
+  .numbers {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    /*grid-template-columns: repeat(5, 1fr);*/
+    margin-bottom: 0.5em;
+  }
+
+  .button-number {
+    width: 11.1%;
+    font-size: 1.2em;
+    aspect-ratio: 1/1;
+    border-radius: 0.2em;
+    margin: 0 0.15em;
+  }
+}
+
+@media (360px < width <= 480px) {
+  .sudoku-menu {
+    width: auto;
+    padding-left: 0;
+    margin: 0.5em;
+  }
+  .sudoku-button {
+    font-size: 0.75em;
+    padding: 0.25em;
+  }
+
+  .sudoku-button-text {
+    display: none;
+  }
+
+  .numbers {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    /*grid-template-columns: repeat(5, 1fr);*/
+  }
+
+  .button-number {
+    width: 11.1%;
+    font-size: 1.5em;
+    aspect-ratio: 1/1;
+    border-radius: 0.2em;
+  }
+
+  .button-row {
+    justify-content: space-around;
+    margin-bottom: 0.25em;
+  }
+}
+
+@media (480px < width <= 768px) {
+  .sudoku-menu {
+    width: auto;
+    padding-left: 0;
+    margin: 1em;
+  }
+  .sudoku-button {
+    padding: 0.5em;
+  }
+
+  .sudoku-button-text {
+    display: none;
+  }
+
+  .button-row {
+    justify-content: space-around;
+  }
+
+  .numbers {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    /*grid-template-columns: repeat(5, 1fr);*/
+  }
+
+  .button-number {
+    width: 11.1%;
+    font-size: 1.2em;
+    aspect-ratio: 1/1;
+    border-radius: 0.2em;
+  }
+}

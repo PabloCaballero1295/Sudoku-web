@@ -30,7 +30,7 @@ export const NewGameModal = () => {
   return (
     <>
       <button className="new-game-button" onClick={handleOpen}>
-        Start New Game
+        New Game
       </button>
       <ModalBox
         title="New Game"

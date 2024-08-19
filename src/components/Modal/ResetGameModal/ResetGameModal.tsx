@@ -24,7 +24,7 @@ export const ResetGameModal = () => {
   return (
     <>
       <button className="reset-game-button" onClick={handleOpen}>
-        Reset Game
+        Reset
       </button>
       <ModalBox
         title="Reset Game"

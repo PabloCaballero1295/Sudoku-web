@@ -1,4 +1,5 @@
 .difficulty-row {
+  font-size: 1em;
   display: flex;
   gap: 1em;
   margin-bottom: 1em;
@@ -9,6 +10,7 @@
 .header-container {
   display: flex;
   justify-content: space-between;
+  padding: 1em 1em 0 1em;
 }
 
 .difficulty-button {
@@ -23,4 +25,64 @@
   padding: 0.5em 1em;
   border-radius: 0.5em;
   cursor: pointer;
+}
+
+.game-buttons {
+  margin-left: auto;
+}
+
+.errors-flex {
+  display: flex;
+}
+
+.time-flex {
+  display: flex;
+}
+
+@media (width <= 360px) {
+  .errors-flex {
+    flex-direction: column;
+    text-align: center;
+  }
+  .time-flex {
+    flex-direction: column;
+    text-align: center;
+  }
+  .difficulty-row {
+    font-size: 0.75em;
+    margin-bottom: 0.5em;
+  }
+
+  .difficulty-button {
+    font-size: 0.75em;
+  }
+
+  .difficulty-button-active {
+    font-size: 0.75em;
+  }
+
+  .header-container {
+    flex-direction: column;
+  }
+}
+
+@media (360px < width <= 480px) {
+  .errors-flex {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .time-flex {
+    flex-direction: column;
+    text-align: center;
+  }
+  .header-container {
+    flex-direction: column;
+  }
+}
+
+@media (480px < width <= 768px) {
+  .header-container {
+    flex-direction: column;
+  }
 }

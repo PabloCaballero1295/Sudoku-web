@@ -125,7 +125,7 @@ export const Sudoku = () => {
   }, [sudoku, dispatch])
 
   return (
-    <div className="sudoku-container">
+    <div className="app-container">
       <div>
         <SudokuHeader />
         <Board />

@@ -10,8 +10,11 @@ import {
   updateSudokuActiveCellValue,
 } from "../../redux/sudokuSlice"
 import { toggleNotesMode } from "../../redux/sudokuToolsSlice"
+import useWindowSize from "../../hooks/hooks"
 
 export const SudokuMenu = () => {
+  const screenSize = useWindowSize()
+
   const sudoku = useAppSelector((state) => state.sudoku)
   const sudokuTools = useAppSelector((state) => state.sudokuTools)
   const dispatch = useAppDispatch()
@@ -41,7 +44,7 @@ export const SudokuMenu = () => {
           <button className="sudoku-button">
             <TbArrowBackUp className="sudoku-button-icon" />
           </button>
-          <div className="sudoku-button-text">Deshacer</div>
+          <div className="sudoku-button-text">Undo</div>
         </div>
         <div>
           <button className="sudoku-button" onClick={() => updateCellValue(0)}>
@@ -94,9 +97,12 @@ export const SudokuMenu = () => {
           </div>
         ))}
       </div>
-      <div className="bottom-row-menu">
-        <NewGameModal />
-      </div>
+
+      {screenSize.width >= 768 ? (
+        <div className="bottom-row-menu">
+          <NewGameModal />
+        </div>
+      ) : undefined}
     </div>
   )
 }
