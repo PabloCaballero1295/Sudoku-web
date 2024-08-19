@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from "../../../redux/hooks"
 
 export const ChangeDifficultyModal = () => {
   const [open, setOpen] = useState(false)
-  //const [difficulty, setDifficulty] = useState(SudokuDifficulty.Easy)
   const [difficultyCLicked, setDifficultyClicked] = useState(
     SudokuDifficulty.Easy
   )
@@ -29,7 +28,6 @@ export const ChangeDifficultyModal = () => {
   }
 
   const handleStartNewGame = () => {
-    //setDifficulty(difficultyCLicked)
     startNewGame()
   }
 

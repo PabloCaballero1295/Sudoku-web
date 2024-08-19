@@ -1,13 +1,17 @@
 import { useState } from "react"
 import { ModalBox } from "../ModalBox/ModalBox"
 import "./ResetGameModal.css"
+import { useAppDispatch } from "../../../redux/hooks"
+import { resetSudoku } from "../../../redux/sudokuSlice"
 
-interface ResetGameModalProps {
-  resetGame: () => void
-}
+export const ResetGameModal = () => {
+  const dispatch = useAppDispatch()
 
-export const ResetGameModal = ({ resetGame }: ResetGameModalProps) => {
   const [open, setOpen] = useState(false)
+
+  const resetGame = () => {
+    dispatch(resetSudoku())
+  }
 
   const handleOpen = () => {
     setOpen(true)

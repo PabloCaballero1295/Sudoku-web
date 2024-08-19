@@ -4,27 +4,27 @@ import { FaEraser } from "react-icons/fa"
 import { FaRegLightbulb } from "react-icons/fa"
 import { TbArrowBackUp } from "react-icons/tb"
 import { NewGameModal } from "../Modal/NewGameModal/NewGameModal"
-import { SudokuDifficulty } from "../../constants/enum"
+import { useAppDispatch, useAppSelector } from "../../redux/hooks"
+import {
+  sudokuUseClue,
+  updateSudokuActiveCellValue,
+  updateSudokuNotesMode,
+} from "../../redux/sudokuSlice"
 
-interface SudokuMenuProps {
-  updateActiveCell: (newValue: number) => void
-  notesMode: boolean
-  updateNotesMode: () => void
-  clues: number
-  handleClue: () => void
-  startNewGame: (gameDifficulty: SudokuDifficulty) => void
-}
+export const SudokuMenu = () => {
+  const sudoku = useAppSelector((state) => state.sudoku)
+  const dispatch = useAppDispatch()
 
-export const SudokuMenu = ({
-  updateActiveCell,
-  notesMode,
-  updateNotesMode,
-  clues,
-  handleClue,
-  startNewGame,
-}: SudokuMenuProps) => {
   const updateCellValue = (newValue: number) => {
-    updateActiveCell(newValue)
+    dispatch(updateSudokuActiveCellValue(newValue))
+  }
+
+  const handleClueButton = () => {
+    dispatch(sudokuUseClue())
+  }
+
+  const toggleNotesMode = () => {
+    dispatch(updateSudokuNotesMode(!sudoku.notesMode))
   }
 
   return (
@@ -45,11 +45,11 @@ export const SudokuMenu = ({
         <div>
           <button
             className={`sudoku-button ${
-              notesMode ? "notes-button-border" : undefined
+              sudoku.notesMode ? "notes-button-border" : undefined
             }`}
-            onClick={updateNotesMode}
+            onClick={toggleNotesMode}
           >
-            {notesMode ? (
+            {sudoku.notesMode ? (
               <div className="notes-mode on">On</div>
             ) : (
               <div className="notes-mode off">Off</div>
@@ -61,11 +61,15 @@ export const SudokuMenu = ({
         <div>
           <button
             className="sudoku-button"
-            onClick={handleClue}
-            disabled={clues > 0 ? false : true}
+            onClick={handleClueButton}
+            disabled={sudoku.clues > 0 ? false : true}
           >
-            <div className={`clues-counter ${clues == 0 ? "off" : undefined}`}>
-              {clues}
+            <div
+              className={`clues-counter ${
+                sudoku.clues == 0 ? "off" : undefined
+              }`}
+            >
+              {sudoku.clues}
             </div>
             <FaRegLightbulb className="sudoku-button-icon" />
           </button>
@@ -84,7 +88,7 @@ export const SudokuMenu = ({
         ))}
       </div>
       <div className="bottom-row-menu">
-        <NewGameModal startNewGame={startNewGame} />
+        <NewGameModal />
       </div>
     </div>
   )

@@ -1,46 +1,17 @@
 import { Cell } from "../Cell/Cell"
-import { BoardCell } from "../Sudoku/Sudoku"
 import { SudokuMenu } from "../SudokuMenu/SudokuMenu"
-import { SudokuDifficulty } from "../../constants/enum"
 
 import "./Board.css"
-import { useAppDispatch } from "../../redux/hooks"
-import { createSudoku } from "../../redux/sudokuSlice"
+import { useAppSelector } from "../../redux/hooks"
 
-interface BoardProps {
-  solution: number[][]
-  board: BoardCell[][]
-  activeCell: { row: number; col: number }
-  updateActiveCell: (row: number, col: number) => void
-  updateActiveCellValue: (newValue: number) => void
-  notesMode: boolean
-  updateNotesMode: () => void
-  clues: number
-  handleClue: () => void
-}
-
-export const Board = ({
-  solution,
-  board,
-  activeCell,
-  updateActiveCell,
-  updateActiveCellValue,
-  notesMode,
-  updateNotesMode,
-  clues,
-  handleClue,
-}: BoardProps) => {
-  const dispatch = useAppDispatch()
-
-  const startNewGame = (newDifficulty: SudokuDifficulty) => {
-    dispatch(createSudoku(newDifficulty))
-  }
+export const Board = () => {
+  const sudoku = useAppSelector((state) => state.sudoku)
 
   return (
     <div className="sudoku-container">
       <div className="sudoku-flex">
         <div className="board">
-          {board.map((row, row_n) => (
+          {sudoku.board.map((row, row_n) => (
             <div key={row_n} className="board-row">
               {row.map((col, col_n) => {
                 return (
@@ -50,24 +21,15 @@ export const Board = ({
                     col={col_n}
                     value={col.value}
                     notes={col.notes}
-                    solutionValue={solution[row_n][col_n]}
+                    solutionValue={sudoku.solution[row_n][col_n]}
                     readOnly={col.readonly}
-                    activeCell={activeCell}
-                    updateActiveCell={updateActiveCell}
                   />
                 )
               })}
             </div>
           ))}
         </div>
-        <SudokuMenu
-          updateActiveCell={updateActiveCellValue}
-          notesMode={notesMode}
-          updateNotesMode={updateNotesMode}
-          clues={clues}
-          handleClue={handleClue}
-          startNewGame={startNewGame}
-        />
+        <SudokuMenu />
       </div>
     </div>
   )

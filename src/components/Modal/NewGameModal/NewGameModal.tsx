@@ -2,14 +2,12 @@ import { useState } from "react"
 import "./NewGameModal.css"
 import { SudokuDifficulty } from "../../../constants/enum"
 import { ModalBox } from "../ModalBox/ModalBox"
+import { useAppDispatch } from "../../../redux/hooks"
+import { createSudoku } from "../../../redux/sudokuSlice"
 
-interface NewGameModalProps {
-  startNewGame: (gameDifficulty: SudokuDifficulty) => void
-}
+export const NewGameModal = () => {
+  const dispatch = useAppDispatch()
 
-export const NewGameModal = ({
-  startNewGame: startNewGame,
-}: NewGameModalProps) => {
   const [open, setOpen] = useState(false)
   const [difficulty, setDifficulty] = useState(SudokuDifficulty.Easy)
 
@@ -26,7 +24,7 @@ export const NewGameModal = ({
   }
 
   const handleStartNewGame = () => {
-    startNewGame(difficulty)
+    dispatch(createSudoku(difficulty))
   }
 
   return (

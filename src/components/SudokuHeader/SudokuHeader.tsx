@@ -1,5 +1,5 @@
-import { useAppDispatch, useAppSelector } from "../../redux/hooks"
-import { resetSudoku } from "../../redux/sudokuSlice"
+import { useAppSelector } from "../../redux/hooks"
+
 import { ChangeDifficultyModal } from "../Modal/ChangeDifficultyModal/ChangeDifficultyModal"
 import { ResetGameModal } from "../Modal/ResetGameModal/ResetGameModal"
 import "./SudokuHeader.css"
@@ -7,18 +7,12 @@ import "./SudokuHeader.css"
 export const SudokuHeader = () => {
   const errors = useAppSelector((state) => state.sudoku.errors)
 
-  const dispatch = useAppDispatch()
-
-  const resetGame = () => {
-    dispatch(resetSudoku())
-  }
-
   return (
     <div className="header-container">
       <div className="difficulty-row">
         <div>Difficulty</div>
         <ChangeDifficultyModal />
-        <ResetGameModal resetGame={resetGame} />
+        <ResetGameModal />
       </div>
 
       <div className="difficulty-row">
