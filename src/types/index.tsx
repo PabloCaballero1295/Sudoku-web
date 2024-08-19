@@ -19,4 +19,5 @@ export interface SudokuState {
   difficulty: SudokuDifficulty
   clues: number
   errors: number
+  timeSpent: number
 }

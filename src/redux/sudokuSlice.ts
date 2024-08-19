@@ -21,10 +21,10 @@ const initialState: SudokuState = {
   difficulty: SudokuDifficulty.Easy,
   clues: SUDOKU_CLUES_NUMBER,
   errors: 0,
+  timeSpent: 0,
 }
 
 const saveStateOnLocalStorage = (data: SudokuState) => {
-  console.log("SAVE")
   localStorage.setItem(sudokuKey, JSON.stringify(data))
 }
 
@@ -45,6 +45,7 @@ export const sudokuSlice = createSlice({
       state.difficulty = sudokuData.difficulty
       state.clues = sudokuData.clues
       state.errors = sudokuData.errors
+      state.timeSpent = 0
 
       saveStateOnLocalStorage(state)
     },
@@ -84,10 +85,16 @@ export const sudokuSlice = createSlice({
       state.difficulty = resetData.difficulty
       state.clues = resetData.clues
       state.errors = resetData.errors
+      state.timeSpent = 0
       saveStateOnLocalStorage(state)
     },
     sudokuUseClue: (state, action) => {
       const activeCell = action.payload
+
+      if (state.board[activeCell.row][activeCell.col].readonly) {
+        return
+      }
+
       state.board[activeCell.row][activeCell.col].value =
         state.solution[activeCell.row][activeCell.col]
       state.board[activeCell.row][activeCell.col].notes = []
@@ -161,6 +168,10 @@ export const sudokuSlice = createSlice({
       state.board = copyBoard
       saveStateOnLocalStorage(state)
     },
+    incrementSudokuTime(state) {
+      state.timeSpent += 1
+      saveStateOnLocalStorage(state)
+    },
   },
 })
 
@@ -173,5 +184,6 @@ export const {
   updateSudokuErrors,
   resetSudoku,
   sudokuUseClue,
+  incrementSudokuTime,
 } = sudokuSlice.actions
 export default sudokuSlice.reducer
