@@ -50,6 +50,56 @@ export const resetSudokuGame = (sudokuData: SudokuState) => {
   return newSudokuData
 }
 
+export const checkSudokuIsSolved = (
+  board: BoardCell[][],
+  solution: number[][]
+) => {
+  let isCompleted = true
+
+  for (let row = 0; row < 9; row++) {
+    if (!isCompleted) {
+      break
+    }
+    for (let col = 0; col < 9; col++) {
+      if (board[row][col].value != solution[row][col]) {
+        isCompleted = false
+        break
+      }
+    }
+  }
+
+  return isCompleted
+}
+
+const transformDigitTo2DigitString = (n: number) => {
+  let text = ""
+
+  if (n < 10) {
+    text = "0" + n.toString()
+  } else {
+    text = n.toString()
+  }
+
+  return text
+}
+
+export const getTimeSpent = (timeSpent: number) => {
+  const hours = Math.floor(timeSpent / 3600)
+  const minutes = Math.floor((timeSpent % 3600) / 60)
+  const seconds = Math.floor((timeSpent % 3600) % 60)
+
+  const hoursString = transformDigitTo2DigitString(hours)
+  const minutesString = transformDigitTo2DigitString(minutes)
+  const secondsString = transformDigitTo2DigitString(seconds)
+
+  let timeSpentString = `${minutesString}:${secondsString}`
+
+  if (hours > 0) {
+    timeSpentString = `${hoursString}:` + timeSpentString
+  }
+  return timeSpentString
+}
+
 export const createSudokuWithDifficulty = (difficulty: SudokuDifficulty) => {
   const id = uuidv4()
   const sudoku = getSudoku(difficulty)
@@ -106,5 +156,6 @@ export const createSudokuWithDifficulty = (difficulty: SudokuDifficulty) => {
     notesMode: false,
     clues: SUDOKU_CLUES_NUMBER,
     errors: 0,
+    isSolved: false,
   }
 }

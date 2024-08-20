@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from "react"
 import { Board } from "../Board/Board"
-import { clamp } from "../../utils/utils"
+import { checkSudokuIsSolved, clamp } from "../../utils/utils"
 import "./Sudoku.css"
 import { SudokuHeader } from "../SudokuHeader/SudokuHeader"
 import { SudokuDifficulty } from "../../constants/enum"
@@ -8,8 +8,10 @@ import { useAppSelector, useAppDispatch } from "../../redux/hooks"
 import {
   createSudoku,
   updateSudokuActiveCellValue,
+  updateSudokuSolved,
 } from "../../redux/sudokuSlice"
 import { toggleNotesMode, updateActiveCell } from "../../redux/sudokuToolsSlice"
+import { GameFinishModal } from "../Modal/GameFinishModal/GameFinishModal"
 
 export interface BoardCell {
   value: number
@@ -122,6 +124,11 @@ export const Sudoku = () => {
     if (sudoku.id == "") {
       dispatch(createSudoku(SudokuDifficulty.Easy))
     }
+
+    const sudokuSolved = checkSudokuIsSolved(sudoku.board, sudoku.solution)
+    if (sudokuSolved) {
+      dispatch(updateSudokuSolved(sudokuSolved))
+    }
   }, [sudoku, dispatch])
 
   return (
@@ -129,6 +136,7 @@ export const Sudoku = () => {
       <div>
         <SudokuHeader />
         <Board />
+        <GameFinishModal />
       </div>
     </div>
   )

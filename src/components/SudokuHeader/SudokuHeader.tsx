@@ -7,6 +7,7 @@ import "./SudokuHeader.css"
 import { incrementSudokuTime } from "../../redux/sudokuSlice"
 import useWindowSize from "../../hooks/hooks"
 import { NewGameModal } from "../Modal/NewGameModal/NewGameModal"
+import { getTimeSpent } from "../../utils/utils"
 
 export const SudokuHeader = () => {
   const sudoku = useAppSelector((state) => state.sudoku)
@@ -17,6 +18,10 @@ export const SudokuHeader = () => {
   const screenSize = useWindowSize()
 
   useEffect(() => {
+    if (sudoku.isSolved) {
+      return
+    }
+
     const interval = setInterval(() => {
       dispatch(incrementSudokuTime())
     }, 1000)
@@ -24,36 +29,7 @@ export const SudokuHeader = () => {
     return () => {
       clearInterval(interval)
     }
-  }, [dispatch])
-
-  const transformDigitTo2DigitString = (n: number) => {
-    let text = ""
-
-    if (n < 10) {
-      text = "0" + n.toString()
-    } else {
-      text = n.toString()
-    }
-
-    return text
-  }
-
-  const getTimeSpent = () => {
-    const hours = Math.floor(timeSpent / 3600)
-    const minutes = Math.floor((timeSpent % 3600) / 60)
-    const seconds = Math.floor((timeSpent % 3600) % 60)
-
-    const hoursString = transformDigitTo2DigitString(hours)
-    const minutesString = transformDigitTo2DigitString(minutes)
-    const secondsString = transformDigitTo2DigitString(seconds)
-
-    let timeSpentString = `${minutesString}:${secondsString}`
-
-    if (hours > 0) {
-      timeSpentString = `${hoursString}:` + timeSpentString
-    }
-    return timeSpentString
-  }
+  }, [dispatch, sudoku])
 
   return (
     <div className="header-container">
@@ -69,7 +45,7 @@ export const SudokuHeader = () => {
         </div>
         <div className="time-flex">
           <div>Time: </div>
-          {getTimeSpent()}
+          {getTimeSpent(timeSpent)}
           <div></div>
         </div>
         <div className="game-buttons">

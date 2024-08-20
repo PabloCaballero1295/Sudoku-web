@@ -22,6 +22,7 @@ const initialState: SudokuState = {
   clues: SUDOKU_CLUES_NUMBER,
   errors: 0,
   timeSpent: 0,
+  isSolved: false,
 }
 
 const saveStateOnLocalStorage = (data: SudokuState) => {
@@ -46,6 +47,7 @@ export const sudokuSlice = createSlice({
       state.clues = sudokuData.clues
       state.errors = sudokuData.errors
       state.timeSpent = 0
+      state.isSolved = false
 
       saveStateOnLocalStorage(state)
     },
@@ -86,10 +88,15 @@ export const sudokuSlice = createSlice({
       state.clues = resetData.clues
       state.errors = resetData.errors
       state.timeSpent = 0
+      state.isSolved = false
       saveStateOnLocalStorage(state)
     },
     sudokuUseClue: (state, action) => {
       const activeCell = action.payload
+
+      if (state.isSolved) {
+        return
+      }
 
       if (state.board[activeCell.row][activeCell.col].readonly) {
         return
@@ -103,6 +110,10 @@ export const sudokuSlice = createSlice({
       saveStateOnLocalStorage(state)
     },
     updateSudokuActiveCellValue: (state, action) => {
+      if (state.isSolved) {
+        return
+      }
+
       const { newValue, activeCell, notesMode } = action.payload
 
       if (state.board[activeCell.row][activeCell.col].readonly) {
@@ -172,6 +183,9 @@ export const sudokuSlice = createSlice({
       state.timeSpent += 1
       saveStateOnLocalStorage(state)
     },
+    updateSudokuSolved(state, action) {
+      state.isSolved = action.payload
+    },
   },
 })
 
@@ -185,5 +199,6 @@ export const {
   resetSudoku,
   sudokuUseClue,
   incrementSudokuTime,
+  updateSudokuSolved,
 } = sudokuSlice.actions
 export default sudokuSlice.reducer

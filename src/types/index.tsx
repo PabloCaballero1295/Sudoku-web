@@ -20,4 +20,5 @@ export interface SudokuState {
   clues: number
   errors: number
   timeSpent: number
+  isSolved: boolean
 }
