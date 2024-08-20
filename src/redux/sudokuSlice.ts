@@ -149,6 +149,7 @@ export const sudokuSlice = createSlice({
     },
     updateSudokuSolved(state, action) {
       state.isSolved = action.payload
+      saveStateOnLocalStorage(state)
     },
     undoSudokuBoard(state) {
       if (state.steps.length <= 0) {
@@ -160,6 +161,7 @@ export const sudokuSlice = createSlice({
         state.board[cell.row][cell.col].value = cell.value
         state.board[cell.row][cell.col].notes = cell.notes
       })
+      saveStateOnLocalStorage(state)
     },
   },
 })
