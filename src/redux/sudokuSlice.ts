@@ -2,10 +2,10 @@ import { createSlice } from "@reduxjs/toolkit"
 import { SudokuDifficulty } from "../constants/enum"
 import { SUDOKU_CLUES_NUMBER } from "../constants/constants"
 import {
-  checkNextActiveCellBox,
   createSudokuWithDifficulty,
-  deepCopy,
   resetSudokuGame,
+  updateBoardCellValue,
+  updateBoardCellValueWithClue,
 } from "../utils/utils"
 import { SudokuState } from "../types"
 
@@ -23,6 +23,7 @@ const initialState: SudokuState = {
   errors: 0,
   timeSpent: 0,
   isSolved: false,
+  steps: [],
 }
 
 const saveStateOnLocalStorage = (data: SudokuState) => {
@@ -48,6 +49,7 @@ export const sudokuSlice = createSlice({
       state.errors = sudokuData.errors
       state.timeSpent = 0
       state.isSolved = false
+      state.steps = sudokuData.steps
 
       saveStateOnLocalStorage(state)
     },
@@ -89,6 +91,7 @@ export const sudokuSlice = createSlice({
       state.errors = resetData.errors
       state.timeSpent = 0
       state.isSolved = false
+      state.steps = []
       saveStateOnLocalStorage(state)
     },
     sudokuUseClue: (state, action) => {
@@ -102,10 +105,12 @@ export const sudokuSlice = createSlice({
         return
       }
 
-      state.board[activeCell.row][activeCell.col].value =
-        state.solution[activeCell.row][activeCell.col]
-      state.board[activeCell.row][activeCell.col].notes = []
-      state.board[activeCell.row][activeCell.col].readonly = true
+      const sudokuUpdatedData = updateBoardCellValueWithClue(
+        state.board,
+        state.solution,
+        activeCell
+      )
+      state.board = sudokuUpdatedData.board
       state.clues = state.clues - 1
       saveStateOnLocalStorage(state)
     },
@@ -120,63 +125,22 @@ export const sudokuSlice = createSlice({
         return
       }
 
-      const copyBoard = deepCopy(state.board)
+      const sudokuUpdatedData = updateBoardCellValue(
+        state.board,
+        state.solution,
+        activeCell,
+        notesMode,
+        newValue
+      )
 
-      // Case used when the user wants to reset a cell state
-      if (newValue === 0) {
-        copyBoard[activeCell.row][activeCell.col].value = 0
-        copyBoard[activeCell.row][activeCell.col].notes = []
-      } else if (notesMode) {
-        copyBoard[activeCell.row][activeCell.col].value = 0
-
-        if (
-          copyBoard[activeCell.row][activeCell.col].notes.includes(newValue)
-        ) {
-          const index = copyBoard[activeCell.row][
-            activeCell.col
-          ].notes.findIndex((n) => n == newValue)
-
-          if (index != -1) {
-            copyBoard[activeCell.row][activeCell.col].notes.splice(index, 1)
-          }
-        } else {
-          copyBoard[activeCell.row][activeCell.col].notes.push(newValue)
-        }
-      } else {
-        copyBoard[activeCell.row][activeCell.col].value = newValue
-        if (state.solution[activeCell.row][activeCell.col] != newValue) {
-          state.errors = state.errors + 1
-        }
-
-        // Loops to check if notes exists on the same box or same row or col
-        // if a number is inside notes in the cell, we will delete it
-        copyBoard.map((row, row_index) => {
-          row.map((cell, col_index) => {
-            const sameBox = checkNextActiveCellBox(
-              activeCell.row,
-              activeCell.col,
-              row_index,
-              col_index
-            )
-
-            if (
-              sameBox ||
-              col_index == activeCell.col ||
-              row_index == activeCell.row
-            ) {
-              if (cell.value == 0 && cell.notes.includes(newValue)) {
-                const index = cell.notes.findIndex((n) => n == newValue)
-                if (index > -1) {
-                  cell.notes.splice(index, 1)
-                }
-              }
-            }
-          })
-        })
-
-        copyBoard[activeCell.row][activeCell.col].notes = []
+      state.board = sudokuUpdatedData.board
+      if (sudokuUpdatedData.modifiedCells.length > 0) {
+        state.steps.push(sudokuUpdatedData.modifiedCells)
       }
-      state.board = copyBoard
+      if (sudokuUpdatedData.hasError) {
+        state.errors = state.errors + 1
+      }
+
       saveStateOnLocalStorage(state)
     },
     incrementSudokuTime(state) {
@@ -185,6 +149,17 @@ export const sudokuSlice = createSlice({
     },
     updateSudokuSolved(state, action) {
       state.isSolved = action.payload
+    },
+    undoSudokuBoard(state) {
+      if (state.steps.length <= 0) {
+        return
+      }
+      const stepCells = state.steps.pop()
+
+      stepCells?.map((cell) => {
+        state.board[cell.row][cell.col].value = cell.value
+        state.board[cell.row][cell.col].notes = cell.notes
+      })
     },
   },
 })
@@ -200,5 +175,6 @@ export const {
   sudokuUseClue,
   incrementSudokuTime,
   updateSudokuSolved,
+  undoSudokuBoard,
 } = sudokuSlice.actions
 export default sudokuSlice.reducer

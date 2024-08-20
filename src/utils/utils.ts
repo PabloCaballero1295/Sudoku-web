@@ -1,9 +1,8 @@
 import { SudokuDifficulty } from "../constants/enum"
 import { getSudoku } from "sudoku-gen"
-import { BoardCell } from "../../src/components/Sudoku/Sudoku"
 import { SUDOKU_CLUES_NUMBER } from "../constants/constants"
 import { v4 as uuidv4 } from "uuid"
-import { SudokuState } from "../types"
+import { BoardCell, CellPos, SudokuState } from "../types"
 
 export function deepCopy<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj))
@@ -40,6 +39,8 @@ export const resetSudokuGame = (sudokuData: SudokuState) => {
         value: sudokuData.initialBoard[row][col],
         notes: [],
         readonly: sudokuData.initialBoard[row][col] != 0 ? true : false,
+        row: row,
+        col: col,
       })
     }
   }
@@ -48,6 +49,126 @@ export const resetSudokuGame = (sudokuData: SudokuState) => {
   newSudokuData.board = deepCopy(newSudokuBoard)
 
   return newSudokuData
+}
+
+export const updateBoardCellValue = (
+  board: BoardCell[][],
+  solution: number[][],
+  activeCell: CellPos,
+  notesMode: boolean,
+  newValue: number
+) => {
+  const copyBoard = deepCopy(board)
+  let hasError = false
+
+  const modifiedCells: BoardCell[] = []
+  modifiedCells.push(deepCopy(copyBoard[activeCell.row][activeCell.col]))
+
+  // Case used when the user wants to reset a cell state
+  if (newValue === 0) {
+    copyBoard[activeCell.row][activeCell.col].value = 0
+    copyBoard[activeCell.row][activeCell.col].notes = []
+  } else if (notesMode) {
+    copyBoard[activeCell.row][activeCell.col].value = 0
+
+    if (copyBoard[activeCell.row][activeCell.col].notes.includes(newValue)) {
+      const index = copyBoard[activeCell.row][activeCell.col].notes.findIndex(
+        (n) => n == newValue
+      )
+
+      if (index != -1) {
+        copyBoard[activeCell.row][activeCell.col].notes.splice(index, 1)
+      }
+    } else {
+      copyBoard[activeCell.row][activeCell.col].notes.push(newValue)
+    }
+  } else {
+    copyBoard[activeCell.row][activeCell.col].value = newValue
+    if (solution[activeCell.row][activeCell.col] != newValue) {
+      hasError = true
+    }
+
+    // Loops to check if notes exists on the same box or same row or col
+    // if a number is inside notes in the cell, we will delete it
+    copyBoard.map((row, row_index) => {
+      row.map((cell, col_index) => {
+        const sameBox = checkNextActiveCellBox(
+          activeCell.row,
+          activeCell.col,
+          row_index,
+          col_index
+        )
+
+        if (
+          sameBox ||
+          col_index == activeCell.col ||
+          row_index == activeCell.row
+        ) {
+          if (cell.value == 0 && cell.notes.includes(newValue)) {
+            const index = cell.notes.findIndex((n) => n == newValue)
+            if (index > -1) {
+              modifiedCells.push(deepCopy(copyBoard[row_index][col_index]))
+              cell.notes.splice(index, 1)
+            }
+          }
+        }
+      })
+    })
+
+    copyBoard[activeCell.row][activeCell.col].notes = []
+  }
+
+  return {
+    board: copyBoard,
+    hasError: hasError,
+    modifiedCells: modifiedCells,
+  }
+}
+
+export const updateBoardCellValueWithClue = (
+  board: BoardCell[][],
+  solution: number[][],
+  activeCell: CellPos
+) => {
+  const copyBoard = deepCopy(board)
+
+  copyBoard[activeCell.row][activeCell.col].value =
+    solution[activeCell.row][activeCell.col]
+  copyBoard[activeCell.row][activeCell.col].notes = []
+  copyBoard[activeCell.row][activeCell.col].readonly = true
+
+  copyBoard.map((row, row_index) => {
+    row.map((cell, col_index) => {
+      const sameBox = checkNextActiveCellBox(
+        activeCell.row,
+        activeCell.col,
+        row_index,
+        col_index
+      )
+
+      if (
+        sameBox ||
+        col_index == activeCell.col ||
+        row_index == activeCell.row
+      ) {
+        if (
+          cell.value == 0 &&
+          cell.notes.includes(solution[activeCell.row][activeCell.col])
+        ) {
+          const index = cell.notes.findIndex(
+            (n) => n == solution[activeCell.row][activeCell.col]
+          )
+          if (index > -1) {
+            cell.notes.splice(index, 1)
+          }
+        }
+      }
+    })
+  })
+
+  return {
+    board: copyBoard,
+  }
 }
 
 export const checkSudokuIsSolved = (
@@ -111,16 +232,24 @@ export const createSudokuWithDifficulty = (difficulty: SudokuDifficulty) => {
   const sudokuSolution: number[][] = []
   let n = 0
 
-  for (let i = 0; i < 9; i++) {
-    sudokuBoard[i] = []
-    for (let j = 0; j < 9; j++) {
+  for (let row = 0; row < 9; row++) {
+    sudokuBoard[row] = []
+    for (let col = 0; col < 9; col++) {
       if (puzzle[n] == "-") {
-        sudokuBoard[i][j] = { value: 0, notes: [], readonly: false }
+        sudokuBoard[row][col] = {
+          value: 0,
+          notes: [],
+          readonly: false,
+          row: row,
+          col: col,
+        }
       } else {
-        sudokuBoard[i][j] = {
+        sudokuBoard[row][col] = {
           value: parseInt(puzzle[n]),
           notes: [],
           readonly: true,
+          row: row,
+          col: col,
         }
       }
       n++
@@ -129,10 +258,10 @@ export const createSudokuWithDifficulty = (difficulty: SudokuDifficulty) => {
 
   n = 0
 
-  for (let i = 0; i < 9; i++) {
-    sudokuSolution[i] = []
-    for (let j = 0; j < 9; j++) {
-      sudokuSolution[i][j] = parseInt(solution[n])
+  for (let row = 0; row < 9; row++) {
+    sudokuSolution[row] = []
+    for (let col = 0; col < 9; col++) {
+      sudokuSolution[row][col] = parseInt(solution[n])
       n++
     }
   }
@@ -157,5 +286,6 @@ export const createSudokuWithDifficulty = (difficulty: SudokuDifficulty) => {
     clues: SUDOKU_CLUES_NUMBER,
     errors: 0,
     isSolved: false,
+    steps: [],
   }
 }

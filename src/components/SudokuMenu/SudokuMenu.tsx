@@ -7,6 +7,7 @@ import { NewGameModal } from "../Modal/NewGameModal/NewGameModal"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import {
   sudokuUseClue,
+  undoSudokuBoard,
   updateSudokuActiveCellValue,
 } from "../../redux/sudokuSlice"
 import { toggleNotesMode } from "../../redux/sudokuToolsSlice"
@@ -37,11 +38,15 @@ export const SudokuMenu = () => {
     dispatch(toggleNotesMode())
   }
 
+  const undo = () => {
+    dispatch(undoSudokuBoard())
+  }
+
   return (
     <div className="sudoku-menu">
       <div className="button-row">
         <div>
-          <button className="sudoku-button">
+          <button className="sudoku-button" onClick={undo}>
             <TbArrowBackUp className="sudoku-button-icon" />
           </button>
           <div className="sudoku-button-text">Undo</div>

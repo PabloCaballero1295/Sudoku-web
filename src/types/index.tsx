@@ -4,6 +4,8 @@ export interface BoardCell {
   value: number
   notes: number[]
   readonly: boolean
+  row: number
+  col: number
 }
 
 export interface CellPos {
@@ -21,4 +23,5 @@ export interface SudokuState {
   errors: number
   timeSpent: number
   isSolved: boolean
+  steps: BoardCell[][]
 }

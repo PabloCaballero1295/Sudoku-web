@@ -13,12 +13,6 @@ import {
 import { toggleNotesMode, updateActiveCell } from "../../redux/sudokuToolsSlice"
 import { GameFinishModal } from "../Modal/GameFinishModal/GameFinishModal"
 
-export interface BoardCell {
-  value: number
-  notes: number[]
-  readonly: boolean
-}
-
 export const Sudoku = () => {
   const sudoku = useAppSelector((state) => state.sudoku)
   const sudokuTools = useAppSelector((state) => state.sudokuTools)
