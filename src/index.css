@@ -1,3 +1,8 @@
+:root {
+  --cell-bg-color: rgb(245, 245, 200);
+  --cell-bg-color2: rgb(199, 199, 164);
+}
+
 /*
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;

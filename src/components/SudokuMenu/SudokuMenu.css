@@ -14,17 +14,13 @@
   align-items: center;
   margin: 0.25rem 0.25rem;
   aspect-ratio: 1/1;
-  background-color: rgb(245, 245, 200);
+  background-color: var(--cell-bg-color);
   border-radius: 0.5rem;
   text-align: center;
   justify-content: center;
   cursor: pointer;
   border: 1px solid rgba(0, 0, 0, 0.4);
   user-select: none;
-}
-
-.button-number:hover {
-  background-color: rgb(199, 199, 164);
 }
 
 .button-row {
@@ -43,24 +39,17 @@
   font: inherit;
   cursor: pointer;
   outline: inherit;
+  -webkit-tap-highlight-color: transparent;
 
-  background-color: rgb(245, 245, 200);
-  border: 2px solid rgb(199, 199, 164);
+  background-color: var(--cell-bg-color);
+  border: 2px solid var(--cell-bg-color2);
   border-radius: 100%;
   padding: 1em;
 }
 
 .sudoku-button:disabled {
-  background-color: rgb(199, 199, 164);
+  background-color: var(--cell-bg-color2);
   cursor: auto;
-}
-
-.sudoku-button:active {
-  background-color: rgb(172, 172, 142) !important;
-}
-
-.sudoku-button:hover {
-  background-color: rgb(199, 199, 164);
 }
 
 .sudoku-button-icon {
@@ -118,6 +107,26 @@
   flex-direction: column;
 }
 
+@media (hover: hover) {
+  .sudoku-button:hover {
+    background-color: rgb(199, 199, 164);
+  }
+
+  .button-number:hover {
+    background-color: var(--cell-bg-color2);
+  }
+}
+
+@media (hover: none) {
+  .button-number:active {
+    background-color: var(--cell-bg-color2);
+  }
+
+  .sudoku-button:active {
+    background-color: var(--cell-bg-color2) !important;
+  }
+}
+
 @media (width <= 360px) {
   .sudoku-menu {
     width: auto;
@@ -147,6 +156,7 @@
   }
 
   .button-number {
+    -webkit-tap-highlight-color: transparent;
     width: auto;
     font-size: 1.4em;
     aspect-ratio: 1/1;
