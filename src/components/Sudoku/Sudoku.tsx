@@ -117,11 +117,11 @@ export const Sudoku = () => {
   useEffect(() => {
     if (sudoku.id == "") {
       dispatch(createSudoku(SudokuDifficulty.Easy))
-    }
-
-    const sudokuSolved = checkSudokuIsSolved(sudoku.board, sudoku.solution)
-    if (sudokuSolved) {
-      dispatch(updateSudokuSolved(sudokuSolved))
+    } else {
+      const sudokuSolved = checkSudokuIsSolved(sudoku.board, sudoku.solution)
+      if (sudokuSolved) {
+        dispatch(updateSudokuSolved(sudokuSolved))
+      }
     }
   }, [sudoku, dispatch])
 
