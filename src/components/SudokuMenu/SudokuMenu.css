@@ -132,12 +132,13 @@
     width: auto;
     padding-left: 0;
     max-width: 30em;
+    margin-top: 1em;
   }
 
   .button-row {
     justify-content: space-around;
     width: auto;
-    margin: 0.5em 1em;
+    margin: 0.5em 1em 1em;
   }
   .sudoku-button {
     font-size: 0.8em;
@@ -171,12 +172,12 @@
   .sudoku-menu {
     width: auto;
     padding-left: 0;
-    margin-top: 1em;
     max-width: 30em;
+    margin-top: 1em;
   }
   .sudoku-button {
-    font-size: 0.75em;
-    padding: 0.25em;
+    font-size: 0.8em;
+    padding: 0.7em;
   }
 
   .sudoku-button-text {
@@ -202,7 +203,8 @@
 
   .button-row {
     justify-content: space-around;
-    margin-bottom: 0.25em;
+    width: auto;
+    margin: 0.5em 1em 1em;
   }
 }
 

@@ -22,6 +22,7 @@
   .board {
     width: auto;
     border: 2px solid black;
+    margin: 0em 0.5em;
   }
   .sudoku-flex {
     flex-direction: column;
@@ -31,6 +32,8 @@
 @media (360px < width <= 480px) {
   .board {
     width: auto;
+    border: 2px solid black;
+    margin: 0em 0.5em;
   }
   .sudoku-flex {
     flex-direction: column;

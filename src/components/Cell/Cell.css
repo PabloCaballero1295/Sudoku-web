@@ -95,4 +95,11 @@
   .cell {
     font-size: 1.5rem;
   }
+  .bottom-border {
+    border-bottom: 2px solid black;
+  }
+
+  .right-border {
+    border-right: 2px solid black;
+  }
 }
