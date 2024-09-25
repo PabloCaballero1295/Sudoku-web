@@ -4,6 +4,6 @@ This is a simple web to play a sudoku game. To try you must follow put these com
 
 - npm install
 - npm run dev
-- open http://localhost:5173/ or the URL your terminal gives you
+- open the URL that is displayed on your terminal
 
 [Demo](https://pablocaballero1295.github.io/Sudoku-web/)
