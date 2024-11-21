@@ -9,6 +9,7 @@
 }
 
 .button_number {
+  position: relative;
   font-size: 2em;
   display: flex;
   align-items: center;
@@ -75,15 +76,15 @@
 }
 
 .notes_button_border {
-  border: 2px solid rgb(11, 163, 252);
+  border: 2px solid var(--color-blue-1);
 }
 
 .notes_mode.on {
-  background-color: rgb(11, 163, 252);
+  background-color: var(--color-blue-1);
 }
 
 .notes_mode.off {
-  background-color: rgb(139, 137, 137);
+  background-color: var(--color-tool-off);
 }
 
 .clues_counter {
@@ -94,11 +95,11 @@
   color: white;
   font-weight: bold;
   border-radius: 1em;
-  background-color: rgb(11, 163, 252);
+  background-color: var(--color-blue-1);
 }
 
 .clues_counter.off {
-  background-color: rgb(139, 137, 137);
+  background-color: var(--color-tool-off);
 }
 
 .bottom_row_menu {
@@ -107,9 +108,21 @@
   flex-direction: column;
 }
 
+.number_counter {
+  position: absolute;
+  font-size: 0.5em;
+  opacity: 0.8;
+  top: 20%;
+  right: 25%;
+}
+
+.button_number_full {
+  background-color: var(--cell-bg-color2);
+}
+
 @media (hover: hover) {
   .sudoku_button:hover {
-    background-color: rgb(199, 199, 164);
+    background-color: var(--cell-bg-color2);
   }
 
   .button_number:hover {

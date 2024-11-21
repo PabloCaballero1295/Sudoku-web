@@ -19,7 +19,7 @@
   -webkit-tap-highlight-color: transparent;
 
   background-color: rgb(186, 236, 243);
-  border: 1px solid rgb(11, 163, 252);
+  border: 1px solid var(--color-blue-1);
   border-radius: 0.5em;
   margin-top: 0.5em;
   padding: 1em;
@@ -29,5 +29,5 @@
 
 .difficulty_selection_button.selected {
   color: white;
-  background-color: rgb(11, 163, 252);
+  background-color: var(--color-blue-1);
 }

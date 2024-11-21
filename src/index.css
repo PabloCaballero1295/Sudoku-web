@@ -1,4 +1,6 @@
 :root {
   --cell-bg-color: rgb(245, 245, 200);
   --cell-bg-color2: rgb(199, 199, 164);
+  --color-blue-1: rgb(11, 163, 252);
+  --color-tool-off: rgb(139, 137, 137);
 }

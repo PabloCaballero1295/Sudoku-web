@@ -17,6 +17,18 @@ export const SudokuMenu = () => {
   const screenSize = useWindowSize()
 
   const sudoku = useAppSelector((state) => state.sudoku)
+
+  const getSudokuNumberCount = (n: number) => {
+    let total = 0
+    sudoku.board.map((row) => {
+      row.map((col) => {
+        if (col.value == n) total++
+      })
+    })
+
+    return total
+  }
+
   const sudokuTools = useAppSelector((state) => state.sudokuTools)
   const dispatch = useAppDispatch()
 
@@ -100,10 +112,17 @@ export const SudokuMenu = () => {
         {Array.from({ length: 9 }).map((_, index) => (
           <div
             key={index + 1}
-            className={styles.button_number}
+            className={`${styles.button_number} ${
+              getSudokuNumberCount(index + 1) == 9
+                ? styles.button_number_full
+                : null
+            }`}
             onClick={() => updateCellValue(index + 1)}
           >
             {index + 1}
+            <div className={styles.number_counter}>
+              {getSudokuNumberCount(index + 1)}
+            </div>
           </div>
         ))}
       </div>
