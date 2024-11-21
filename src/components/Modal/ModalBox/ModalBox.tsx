@@ -1,6 +1,6 @@
 import { ReactNode } from "react"
 import { Modal } from "@mui/material"
-import "./ModalBox.css"
+import styles from "./ModalBox.module.css"
 
 interface ModalBox {
   title: string
@@ -30,16 +30,19 @@ export const ModalBox = ({
 
   return (
     <Modal open={open} onClose={closeModal}>
-      <div className="modal-box">
-        <div className="modal-header">
-          <div className="modal-title">{title}</div>
+      <div className={styles["modal-box"]}>
+        <div className={styles["modal-header"]}>
+          <div className={styles["modal-title"]}>{title}</div>
         </div>
         {children}
-        <div className="modal-button-row">
-          <button className="accept-button" onClick={handleAcceptAction}>
+        <div className={styles["modal-button-row"]}>
+          <button
+            className={styles["accept-button"]}
+            onClick={handleAcceptAction}
+          >
             {acceptButtonText}
           </button>
-          <button className="cancel-button" onClick={closeModal}>
+          <button className={styles["cancel-button"]} onClick={closeModal}>
             {cancelButtonText}
           </button>
         </div>

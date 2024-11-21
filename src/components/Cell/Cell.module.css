@@ -16,11 +16,11 @@
   color: blue;
 }
 
-.cell-last-col {
+.cell_last_col {
   border-right: none;
 }
 
-.cell-last-row {
+.cell_last_row {
   border-bottom: none;
 }
 .notes {
@@ -30,27 +30,27 @@
   width: 100%;
 }
 
-.notes-number {
+.notes_number {
   height: 1.25em;
   color: rgb(70, 69, 69);
   font-size: 0.4em;
 }
 
-.bottom-border {
+.bottom_border {
   border-bottom: 4px solid black;
 }
 
-.right-border {
+.right_border {
   border-right: 4px solid black;
 }
 
-.read-only {
+.read_only {
   color: black;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.15);
   font-weight: bold;
 }
 
-.inner-box {
+.inner_box {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -59,18 +59,18 @@
   height: 100%;
 }
 
-.active-cell {
+.active_cell {
   background-color: rgba(30, 176, 221, 0.65);
 }
-.active-cell-same-number {
+.active_cell_same_number {
   background-color: rgba(30, 176, 221, 0.65);
 }
 
-.active-cell-row-col {
-  background-color: rgba(30, 176, 221, 0.15);
+.active_cell_row_col {
+  background-color: rgba(30, 176, 221, 0.2);
 }
 
-.error-cell {
+.error_cell {
   background-color: rgba(255, 0, 0, 0.2);
   color: red;
 }
@@ -79,15 +79,15 @@
   .cell {
     font-size: 1.1rem;
   }
-  .bottom-border {
+  .bottom_border {
     border-bottom: 2px solid black;
   }
 
-  .right-border {
+  .right_border {
     border-right: 2px solid black;
   }
 
-  .notes-number {
+  .notes_number {
     font-size: 0.5em;
   }
 }
@@ -95,11 +95,11 @@
   .cell {
     font-size: 1.5rem;
   }
-  .bottom-border {
+  .bottom_border {
     border-bottom: 2px solid black;
   }
 
-  .right-border {
+  .right_border {
     border-right: 2px solid black;
   }
 }

@@ -1,24 +1,24 @@
-.app-container {
+.app_container {
   max-width: 50em;
   margin: auto;
 }
 
 @media (width <= 360px) {
-  .app-container {
+  .app_container {
     width: 100%;
     margin: auto;
   }
 }
 
 @media (360px < width <= 480px) {
-  .app-container {
+  .app_container {
     width: 100%;
     margin: auto;
   }
 }
 
 @media (480px < width <= 768px) {
-  .app-container {
+  .app_container {
     width: 100%;
     margin: auto;
   }

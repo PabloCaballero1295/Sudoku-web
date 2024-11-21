@@ -1,0 +1,33 @@
+.modal-body {
+  margin-bottom: 1em;
+  text-align: center;
+}
+
+.difficulty_select {
+  display: flex;
+  flex-direction: column;
+}
+
+.difficulty_selection_button {
+  position: relative;
+  background: none;
+  color: inherit;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  -webkit-tap-highlight-color: transparent;
+
+  background-color: rgb(186, 236, 243);
+  border: 1px solid rgb(11, 163, 252);
+  border-radius: 0.5em;
+  margin-top: 0.5em;
+  padding: 1em;
+  font-weight: bold;
+  color: black;
+}
+
+.difficulty_selection_button.selected {
+  color: white;
+  background-color: rgb(11, 163, 252);
+}

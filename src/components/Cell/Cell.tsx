@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import "./Cell.css"
+import styles from "./Cell.module.css"
 import { checkNextActiveCellBox } from "../../utils/utils"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 //import { updateSudokuActiveCell } from "../../redux/sudokuSlice"
@@ -50,44 +50,44 @@ export const Cell = ({
   }
 
   const getCellStyle = () => {
-    let cellStyle = "cell"
+    let cellStyle = styles.cell
 
     if (row == 8) {
-      cellStyle += " cell-last-row"
+      cellStyle += ` ${styles.cell_last_row}`
     }
     if (col == 8) {
-      cellStyle += " cell-last-col"
+      cellStyle += ` ${styles.cell_last_col}`
     }
 
     if (borderBottom) {
-      cellStyle += " bottom-border"
+      cellStyle += ` ${styles.bottom_border}`
     }
 
     if (borderRight) {
-      cellStyle += " right-border"
+      cellStyle += ` ${styles.right_border}`
     }
 
     if (readOnly) {
-      cellStyle += " read-only"
+      cellStyle += ` ${styles.read_only}`
     }
     if (activeCell.row == row && activeCell.col == col) {
-      cellStyle += " active-cell"
+      cellStyle += ` ${styles.active_cell}`
     } else if ((activeCell.row == row || activeCell.col == col) && !readOnly) {
-      cellStyle += " active-cell-row-col"
+      cellStyle += ` ${styles.active_cell_row_col}`
     } else if (
       checkNextActiveCellBox(activeCell.row, activeCell.col, row, col) &&
       !readOnly
     ) {
-      cellStyle += " active-cell-row-col"
+      cellStyle += ` ${styles.active_cell_row_col}`
     } else if (
       value == sudoku.board[activeCell.row][activeCell.col].value &&
       value != 0
     ) {
-      cellStyle += " active-cell-same-number"
+      cellStyle += ` ${styles.active_cell_same_number}`
     }
 
     if (cellValue != 0 && cellValue != solutionValue) {
-      cellStyle += " error-cell"
+      cellStyle += ` ${styles.error_cell}`
     }
 
     return cellStyle
@@ -96,7 +96,7 @@ export const Cell = ({
   const getInnerBoxStyle = () => {
     let cellStyle = ""
     if (activeCell.row == row && activeCell.col == col) {
-      cellStyle += " inner-box"
+      cellStyle += ` ${styles.inner_box}`
     }
     return cellStyle
   }
@@ -112,11 +112,11 @@ export const Cell = ({
               cellValue
             )
           ) : (
-            <div className="notes">
+            <div className={styles.notes}>
               {Array(9)
                 .fill("")
                 .map((_, index) => (
-                  <div className="notes-number" key={index}>
+                  <div className={styles.notes_number} key={index}>
                     {notes.includes(index + 1) ? index + 1 : " "}
                   </div>
                 ))}

@@ -1,4 +1,4 @@
-.sudoku-flex {
+.sudoku_flex {
   display: flex;
   justify-content: center;
   width: 100%;
@@ -14,7 +14,7 @@
   /*box-shadow: 0px 0px 50px 0px rgba(0, 0, 0, 0.75);*/
 }
 
-.board-row {
+.board_row {
   display: flex;
 }
 
@@ -24,7 +24,7 @@
     border: 2px solid black;
     margin: 0em 0.5em;
   }
-  .sudoku-flex {
+  .sudoku_flex {
     flex-direction: column;
   }
 }
@@ -35,7 +35,7 @@
     border: 2px solid black;
     margin: 0em 0.5em;
   }
-  .sudoku-flex {
+  .sudoku_flex {
     flex-direction: column;
   }
 }
@@ -45,7 +45,7 @@
     width: 30em;
     margin: auto;
   }
-  .sudoku-flex {
+  .sudoku_flex {
     flex-direction: column;
   }
 }

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import "./ChangeDifficultyModal.css"
+import styles from "./ChangeDifficultyModal.module.css"
 import { SudokuDifficulty } from "../../../constants/enum"
 import { ModalBox } from "../ModalBox/ModalBox"
 import { createSudoku } from "../../../redux/sudokuSlice"
@@ -33,9 +33,9 @@ export const ChangeDifficultyModal = () => {
 
   const getStyle = (buttonDifficulty: SudokuDifficulty) => {
     if (difficulty == buttonDifficulty) {
-      return "difficulty-button-active"
+      return styles.difficulty_button_active
     } else {
-      return "difficulty-button"
+      return styles.difficulty_button
     }
   }
 
@@ -68,7 +68,7 @@ export const ChangeDifficultyModal = () => {
         acceptButtonText="Start new game"
       >
         <div>
-          <div className="modal-body">
+          <div className={styles.modal_body}>
             {`Are you sure you want to start a new game in the "${difficultyCLicked}" difficulty?`}
             <br /> All progress made will be lost.
           </div>

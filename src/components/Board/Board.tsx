@@ -1,18 +1,18 @@
 import { Cell } from "../Cell/Cell"
 import { SudokuMenu } from "../SudokuMenu/SudokuMenu"
 
-import "./Board.css"
+import styles from "./Board.module.css"
 import { useAppSelector } from "../../redux/hooks"
 
 export const Board = () => {
   const sudoku = useAppSelector((state) => state.sudoku)
 
   return (
-    <div className="sudoku-container">
-      <div className="sudoku-flex">
-        <div className="board">
+    <div className={styles.sudoku_container}>
+      <div className={styles.sudoku_flex}>
+        <div className={styles.board}>
           {sudoku.board.map((row, row_n) => (
-            <div key={row_n} className="board-row">
+            <div key={row_n} className={styles.board_row}>
               {row.map((col, col_n) => {
                 return (
                   <Cell

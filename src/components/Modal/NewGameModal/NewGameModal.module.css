@@ -65,10 +65,12 @@
     margin: auto;
     margin-left: 0.5em;
   }
+  /*
   .sudoku-container {
     width: 100%;
     margin: auto;
   }
+  */
 }
 
 @media (480px < width <= 768px) {
@@ -77,8 +79,10 @@
     margin: auto;
     margin-left: 0.5em;
   }
+  /*
   .sudoku-container {
     width: 100%;
     margin: auto;
   }
+    */
 }

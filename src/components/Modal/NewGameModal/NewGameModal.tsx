@@ -1,5 +1,5 @@
 import { useState } from "react"
-import "./NewGameModal.css"
+import styles from "./NewGameModal.module.css"
 import { SudokuDifficulty } from "../../../constants/enum"
 import { ModalBox } from "../ModalBox/ModalBox"
 import { useAppDispatch } from "../../../redux/hooks"
@@ -29,7 +29,7 @@ export const NewGameModal = () => {
 
   return (
     <>
-      <button className="new-game-button" onClick={handleOpen}>
+      <button className={styles["new-game-button"]} onClick={handleOpen}>
         New Game
       </button>
       <ModalBox
@@ -40,30 +40,30 @@ export const NewGameModal = () => {
         acceptButtonText="Start new game"
       >
         <div>
-          <div className="modal-body">
+          <div className={styles["modal-body"]}>
             Select the game difficulty to start a new game
           </div>
-          <div className="difficulty-select">
+          <div className={styles["difficulty-select"]}>
             <button
               onClick={() => handleDifficultySelection(SudokuDifficulty.Easy)}
-              className={`difficulty-selection-button ${
-                difficulty == "easy" ? "selected" : undefined
+              className={`${styles["difficulty-selection-button"]} ${
+                difficulty == "easy" ? styles.selected : undefined
               }`}
             >
               Easy
             </button>
             <button
               onClick={() => handleDifficultySelection(SudokuDifficulty.Medium)}
-              className={`difficulty-selection-button ${
-                difficulty == "medium" ? "selected" : undefined
+              className={`${styles["difficulty-selection-button"]} ${
+                difficulty == "medium" ? styles.selected : undefined
               }`}
             >
               Medium
             </button>
             <button
               onClick={() => handleDifficultySelection(SudokuDifficulty.Hard)}
-              className={`difficulty-selection-button ${
-                difficulty == "hard" ? "selected" : undefined
+              className={`${styles["difficulty-selection-button"]} ${
+                difficulty == "hard" ? styles.selected : undefined
               }`}
             >
               Hard

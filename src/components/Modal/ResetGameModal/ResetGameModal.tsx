@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { ModalBox } from "../ModalBox/ModalBox"
-import "./ResetGameModal.css"
+import styles from "./ResetGameModal.module.css"
 import { useAppDispatch } from "../../../redux/hooks"
 import { resetSudoku } from "../../../redux/sudokuSlice"
 
@@ -23,7 +23,7 @@ export const ResetGameModal = () => {
 
   return (
     <>
-      <button className="reset-game-button" onClick={handleOpen}>
+      <button className={styles["reset-game-button"]} onClick={handleOpen}>
         Reset
       </button>
       <ModalBox
@@ -34,7 +34,7 @@ export const ResetGameModal = () => {
         acceptButtonText="Reset game"
       >
         <div>
-          <div className="modal-body">
+          <div className={styles["modal-body"]}>
             Are you sure you want to reset the game to the initial values?
             <br /> All progress made will be lost.
           </div>

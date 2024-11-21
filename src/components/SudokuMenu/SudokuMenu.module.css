@@ -1,4 +1,4 @@
-.sudoku-menu {
+.sudoku_menu {
   width: 20em;
   padding-left: 1em;
 }
@@ -8,7 +8,7 @@
   grid-template-columns: repeat(3, 1fr);
 }
 
-.button-number {
+.button_number {
   font-size: 2em;
   display: flex;
   align-items: center;
@@ -23,14 +23,14 @@
   user-select: none;
 }
 
-.button-row {
+.button_row {
   display: flex;
   justify-content: space-between;
   width: 100%;
   margin-bottom: 1em;
 }
 
-.sudoku-button {
+.sudoku_button {
   position: relative;
   background: none;
   color: inherit;
@@ -47,24 +47,24 @@
   padding: 1em;
 }
 
-.sudoku-button:disabled {
+.sudoku_button:disabled {
   background-color: var(--cell-bg-color2);
   cursor: auto;
 }
 
-.sudoku-button-icon {
+.sudoku_button_icon {
   width: 2em;
   height: 2em;
 }
 
-.sudoku-button-text {
+.sudoku_button_text {
   margin-top: 0.5em;
   text-align: center;
   user-select: none;
   font-size: 0.9em;
 }
 
-.notes-mode {
+.notes_mode {
   position: absolute;
   padding: 0.25em 0.5em;
   top: -0.5em;
@@ -74,19 +74,19 @@
   border-radius: 1em;
 }
 
-.notes-button-border {
+.notes_button_border {
   border: 2px solid rgb(11, 163, 252);
 }
 
-.notes-mode.on {
+.notes_mode.on {
   background-color: rgb(11, 163, 252);
 }
 
-.notes-mode.off {
+.notes_mode.off {
   background-color: rgb(139, 137, 137);
 }
 
-.clues-counter {
+.clues_counter {
   position: absolute;
   padding: 0.25em 0.5em;
   top: -0.5em;
@@ -97,55 +97,55 @@
   background-color: rgb(11, 163, 252);
 }
 
-.clues-counter.off {
+.clues_counter.off {
   background-color: rgb(139, 137, 137);
 }
 
-.bottom-row-menu {
+.bottom_row_menu {
   width: 100%;
   display: flex;
   flex-direction: column;
 }
 
 @media (hover: hover) {
-  .sudoku-button:hover {
+  .sudoku_button:hover {
     background-color: rgb(199, 199, 164);
   }
 
-  .button-number:hover {
+  .button_number:hover {
     background-color: var(--cell-bg-color2);
   }
 }
 
 @media (hover: none) {
-  .button-number:active {
+  .button_number:active {
     background-color: var(--cell-bg-color2);
   }
 
-  .sudoku-button:active {
+  .sudoku_button:active {
     background-color: var(--cell-bg-color2) !important;
   }
 }
 
 @media (width <= 360px) {
-  .sudoku-menu {
+  .sudoku_menu {
     width: auto;
     padding-left: 0;
     max-width: 30em;
     margin-top: 1em;
   }
 
-  .button-row {
+  .button_row {
     justify-content: space-around;
     width: auto;
     margin: 0.5em 1em 1em;
   }
-  .sudoku-button {
+  .sudoku_button {
     font-size: 0.8em;
     padding: 0.5em;
   }
 
-  .sudoku-button-text {
+  .sudoku_button-text {
     display: none;
   }
 
@@ -156,7 +156,7 @@
     grid-template-columns: repeat(5, 1fr);
   }
 
-  .button-number {
+  .button_number {
     -webkit-tap-highlight-color: transparent;
     width: auto;
     font-size: 1.4em;
@@ -169,18 +169,18 @@
 }
 
 @media (360px < width <= 480px) {
-  .sudoku-menu {
+  .sudoku_menu {
     width: auto;
     padding-left: 0;
     max-width: 30em;
     margin-top: 1em;
   }
-  .sudoku-button {
+  .sudoku_button {
     font-size: 0.8em;
     padding: 0.7em;
   }
 
-  .sudoku-button-text {
+  .sudoku_button_text {
     display: none;
   }
 
@@ -191,7 +191,7 @@
     grid-template-columns: repeat(5, 1fr);
   }
 
-  .button-number {
+  .button_number {
     width: auto;
     font-size: 1.4em;
     aspect-ratio: 1/1;
@@ -201,7 +201,7 @@
     margin-bottom: 0.1em;
   }
 
-  .button-row {
+  .button_row {
     justify-content: space-around;
     width: auto;
     margin: 0.5em 1em 1em;
@@ -209,21 +209,21 @@
 }
 
 @media (480px < width <= 768px) {
-  .sudoku-menu {
+  .sudoku_menu {
     margin: auto;
     margin-top: 1em;
     padding-left: 0;
     width: 30em;
   }
-  .sudoku-button {
+  .sudoku_button {
     padding: 0.5em;
   }
 
-  .sudoku-button-text {
+  .sudoku_button_text {
     display: none;
   }
 
-  .button-row {
+  .button_row {
     justify-content: space-around;
   }
 
@@ -234,7 +234,7 @@
     grid-template-columns: repeat(5, 1fr);
   }
 
-  .button-number {
+  .button_number {
     width: auto;
     font-size: 1.4em;
     aspect-ratio: 1/1;

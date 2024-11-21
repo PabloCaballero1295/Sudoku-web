@@ -1,7 +1,7 @@
 import { useEffect, useCallback } from "react"
 import { Board } from "../Board/Board"
 import { checkSudokuIsSolved, clamp } from "../../utils/utils"
-import "./Sudoku.css"
+import styles from "./Sudoku.module.css"
 import { SudokuHeader } from "../SudokuHeader/SudokuHeader"
 import { SudokuDifficulty } from "../../constants/enum"
 import { useAppSelector, useAppDispatch } from "../../redux/hooks"
@@ -126,7 +126,7 @@ export const Sudoku = () => {
   }, [sudoku, dispatch])
 
   return (
-    <div className="app-container">
+    <div className={styles.app_container}>
       <div>
         <SudokuHeader />
         <Board />

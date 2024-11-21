@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import "./GameFinishModal.css"
+import styles from "./GameFinishModal.module.css"
 import { SudokuDifficulty } from "../../../constants/enum"
 import { ModalBox } from "../ModalBox/ModalBox"
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks"
@@ -52,34 +52,34 @@ export const GameFinishModal = () => {
         acceptButtonText="Start new game"
       >
         <div>
-          <div className="modal-body">
+          <div className={styles.modal_body}>
             Errors: {sudoku.errors}
             <br />
             Time: {getTimeSpent(sudoku.timeSpent)}
             <br />
             Do you want to play a new game?
           </div>
-          <div className="difficulty-select">
+          <div className={styles.difficulty_select}>
             <button
               onClick={() => handleDifficultySelection(SudokuDifficulty.Easy)}
-              className={`difficulty-selection-button ${
-                difficulty == "easy" ? "selected" : undefined
+              className={`${styles.difficulty_selection_button} ${
+                difficulty == "easy" ? styles.selected : undefined
               }`}
             >
               Easy
             </button>
             <button
               onClick={() => handleDifficultySelection(SudokuDifficulty.Medium)}
-              className={`difficulty-selection-button ${
-                difficulty == "medium" ? "selected" : undefined
+              className={`${styles.difficulty_selection_button} ${
+                difficulty == "medium" ? styles.selected : undefined
               }`}
             >
               Medium
             </button>
             <button
               onClick={() => handleDifficultySelection(SudokuDifficulty.Hard)}
-              className={`difficulty-selection-button ${
-                difficulty == "hard" ? "selected" : undefined
+              className={`${styles.difficulty_selection_button} ${
+                difficulty == "hard" ? styles.selected : undefined
               }`}
             >
               Hard

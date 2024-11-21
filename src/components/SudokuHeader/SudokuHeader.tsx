@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 
 import { ChangeDifficultyModal } from "../Modal/ChangeDifficultyModal/ChangeDifficultyModal"
 import { ResetGameModal } from "../Modal/ResetGameModal/ResetGameModal"
-import "./SudokuHeader.css"
+import styles from "./SudokuHeader.module.css"
 import { incrementSudokuTime } from "../../redux/sudokuSlice"
 import useWindowSize from "../../hooks/hooks"
 import { NewGameModal } from "../Modal/NewGameModal/NewGameModal"
@@ -32,23 +32,23 @@ export const SudokuHeader = () => {
   }, [dispatch, sudoku])
 
   return (
-    <div className="header-container">
-      <div className="difficulty-row">
+    <div className={styles.header_container}>
+      <div className={styles.difficulty_row}>
         <div>Difficulty</div>
         <ChangeDifficultyModal />
       </div>
 
-      <div className="difficulty-row">
-        <div className="errors-flex">
+      <div className={styles.difficulty_row}>
+        <div className={styles.errors_flex}>
           <div>Errors: </div>
           <div>{errors}</div>
         </div>
-        <div className="time-flex">
+        <div className={styles.time_flex}>
           <div>Time: </div>
           {getTimeSpent(timeSpent)}
           <div></div>
         </div>
-        <div className="game-buttons">
+        <div className={styles.game_buttons}>
           <ResetGameModal />
           {screenSize.width > 768 ? undefined : <NewGameModal />}
         </div>
